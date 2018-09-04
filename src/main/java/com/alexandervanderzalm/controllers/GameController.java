@@ -1,33 +1,24 @@
 package com.alexandervanderzalm.controllers;
 
 import com.alexandervanderzalm.Model.TurnData;
-import com.alexandervanderzalm.Model.TurnDataFromClient;
+import com.alexandervanderzalm.Model.TurnInputData;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class GameController {
 
-    @GetMapping("/")
-    public String getHelloWorldMessage() {
-        return "YOYO";
-    }
-
     @RequestMapping("/game")
     public TurnData InitializeGame() {
-        return new TurnData();
-        // Change to Service
+        return TurnDataService.InitGame();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/game")
-    public TurnData DoTurn(@RequestBody TurnDataFromClient input){
-        TurnData test = new TurnData();
-        test.Player1Score = input.PlayerID;
-        return test;
-        // Change to Service
+    public TurnData DoTurn(@RequestBody TurnInputData input){
+        return TurnDataService.DoTurn(input);
     }
 
     @RequestMapping("/sample")
-    public TurnDataFromClient GetSample() {
-        return new TurnDataFromClient();
+    public TurnInputData GetSample() {
+        return new TurnInputData();
     }
 }
