@@ -21,4 +21,9 @@ public class GameController {
     public TurnInputData GetSample() {
         return new TurnInputData();
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/sample")
+    public TurnData DoTurn(@RequestBody TurnData input){
+        return input;
+    }
 }

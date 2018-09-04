@@ -1,8 +1,8 @@
 package com.alexandervanderzalm.Model;
 
-enum GameState{
-    Init, TurnP1, TurnP2, TurnOtherPlayer, WinP1, WinP2, WinOtherPlayer, Disconnect, Error
-}
+import java.util.function.Function;
+
+
 
 public class TurnData {
     // Previous
@@ -11,6 +11,9 @@ public class TurnData {
     public int Player2Score;
     public GameState StartOfTurnState; // Get this from previous?
     public GameState EndOfTurnState;
+    //public Function<Boolean,Boolean> func;
+
+    public String Test;
     // public int TurnCount??
     // BucketResult
     // Transformation sequence
