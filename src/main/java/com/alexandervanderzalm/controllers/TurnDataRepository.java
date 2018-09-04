@@ -1,4 +1,4 @@
 package com.alexandervanderzalm.controllers;
 
-public class TestController {
+public class TurnDataRepository {
 }
