@@ -7,3 +7,9 @@ public interface IPit<T> {
     public int Amount();
     public T GrabAll();
 }
+
+
+
+// TODO Think about function hookups if needed
+// Like the actions
+
