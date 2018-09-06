@@ -1,5 +1,6 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Utility.OnChangedProcedureHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
@@ -12,7 +13,7 @@ class ObservedPitTest {
     @Test
     void add_AddedEvent_FiredEventOnChange() {
         // Setup
-        ObservedPit p = new ObservedPit();
+        ObservedPit p = new ObservedPit(new OnChangedProcedureHelper());
         p.OnChangedHelper.AddOnChangedProcedure(() -> ChangeLogger +=1 );
         ChangeLogger = 0;
 
@@ -27,7 +28,7 @@ class ObservedPitTest {
     @Test
     void grabAll_AddedEvent_FiredEventOnChange() {
         // Setup
-        ObservedPit p = new ObservedPit();
+        ObservedPit p = new ObservedPit(new OnChangedProcedureHelper());
         p.OnChangedHelper.AddOnChangedProcedure(() -> ChangeLogger +=1 );
         ChangeLogger = 0;
 

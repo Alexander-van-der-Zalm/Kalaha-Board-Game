@@ -1,9 +1,16 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Utility.IObserveChange;
 import com.alexandervanderzalm.game.Utility.OnChangedProcedureHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class ObservedPit extends Pit {
-    public OnChangedProcedureHelper OnChangedHelper = new OnChangedProcedureHelper();
+
+    public IObserveChange OnChangedHelper;// = new OnChangedProcedureHelper();
+
+    public ObservedPit(IObserveChange onChangedHelper) {
+        OnChangedHelper = onChangedHelper;
+    }
 
     public void Add(Integer stones){
         super.Add(stones);
