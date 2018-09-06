@@ -38,8 +38,3 @@ public class ObserveChange<T> {
 
 
 }
-
-@FunctionalInterface
-interface Procedure{
-    void Process();
-}

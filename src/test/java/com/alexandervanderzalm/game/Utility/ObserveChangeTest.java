@@ -33,8 +33,3 @@ public class ObserveChangeTest {
         //Assert.isTrue(TestLocal == 2, "After two changes (each change adds 1) - testNumber == 2");
     }*/
 }
-
-
-class TestMethoAdd{
-    public List<Integer> nrs;
-}

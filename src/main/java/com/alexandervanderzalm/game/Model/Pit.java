@@ -1,7 +1,7 @@
 package com.alexandervanderzalm.game.Model;
 
 public class Pit implements IPit<Integer> {
-    Integer stones = 0;
+    private Integer stones = 0;
 
     @Override
     public void Add(Integer stones) {
