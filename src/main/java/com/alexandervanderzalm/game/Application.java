@@ -1,4 +1,4 @@
-package com.alexandervanderzalm;
+package com.alexandervanderzalm.game;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

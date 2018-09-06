@@ -1,7 +1,7 @@
-package com.alexandervanderzalm.controllers;
+package com.alexandervanderzalm.game.controllers;
 
-import com.alexandervanderzalm.Model.TurnData;
-import com.alexandervanderzalm.Model.TurnInputData;
+import com.alexandervanderzalm.game.Model.TurnData;
+import com.alexandervanderzalm.game.Model.TurnInputData;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

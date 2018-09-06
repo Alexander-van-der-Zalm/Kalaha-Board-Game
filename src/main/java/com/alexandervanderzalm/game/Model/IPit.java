@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.Model;
+package com.alexandervanderzalm.game.Model;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ public interface IPit<T> {
     public int Amount();
     public T GrabAll();
 }
+
 
 
 

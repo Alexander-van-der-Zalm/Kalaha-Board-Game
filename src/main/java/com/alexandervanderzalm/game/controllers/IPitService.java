@@ -1,7 +1,7 @@
-package com.alexandervanderzalm.controllers;
+package com.alexandervanderzalm.game.controllers;
 
-import com.alexandervanderzalm.Model.IPit;
-import com.alexandervanderzalm.Model.IPitCollection;
+import com.alexandervanderzalm.game.Model.IPit;
+import com.alexandervanderzalm.game.Model.IPitCollection;
 
 public class IPitService {
 

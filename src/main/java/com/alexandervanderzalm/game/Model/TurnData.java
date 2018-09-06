@@ -1,7 +1,4 @@
-package com.alexandervanderzalm.Model;
-
-import java.util.function.Function;
-
+package com.alexandervanderzalm.game.Model;
 
 
 public class TurnData {

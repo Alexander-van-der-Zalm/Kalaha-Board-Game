@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.Model;
+package com.alexandervanderzalm.game.Model;
 
 public interface IPitCollection<T> {
 
