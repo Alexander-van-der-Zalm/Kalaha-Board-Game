@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.game.Utility;
+package com.alexandervanderzalm.game.Utility.FunctionalInterfaces;
 
 @FunctionalInterface
 public interface Procedure {

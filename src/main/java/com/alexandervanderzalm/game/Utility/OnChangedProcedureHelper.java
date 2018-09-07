@@ -1,5 +1,7 @@
 package com.alexandervanderzalm.game.Utility;
 
+import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
+
 import java.util.ArrayList;
 import java.util.List;
 

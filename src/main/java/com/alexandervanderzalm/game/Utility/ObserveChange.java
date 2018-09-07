@@ -1,8 +1,9 @@
 package com.alexandervanderzalm.game.Utility;
 
+import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class ObserveChange<T> {
     private List<Procedure> OnChanged = new ArrayList<Procedure>();

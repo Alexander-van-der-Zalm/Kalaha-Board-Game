@@ -1,7 +1,6 @@
 package com.alexandervanderzalm.game.Utility;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
 
 public interface ITriggerProcedureOnChange {
     void TriggerOnChangedProcedures();
