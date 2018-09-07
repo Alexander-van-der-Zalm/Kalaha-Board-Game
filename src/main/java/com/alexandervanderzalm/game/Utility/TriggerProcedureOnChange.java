@@ -5,7 +5,7 @@ import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnChangedProcedureHelper implements ITriggerProcedureOnChange {
+public class TriggerProcedureOnChange implements ITriggerProcedureOnChange {
 
     private List<Procedure> onChangedProcedures = new ArrayList<Procedure>();
 

@@ -2,7 +2,7 @@ package com.alexandervanderzalm.game.Model;
 
 import com.alexandervanderzalm.game.Utility.IMethodScheduler;
 import com.alexandervanderzalm.game.Utility.ITriggerProcedureOnChange;
-import com.alexandervanderzalm.game.Utility.OnChangedProcedureHelper;
+import com.alexandervanderzalm.game.Utility.TriggerProcedureOnChange;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,7 +110,7 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
         List<IKalahaPit> pits = new ArrayList<>();
 
         for(int player = 0; player<2; player++) {
-            IKalahaPit kalaha = new KalahaPit(new OnChangedProcedureHelper());
+            IKalahaPit kalaha = new KalahaPit(new TriggerProcedureOnChange());
             kalaha.MakeKalaha();
             kalaha.SetPlayer(player);
             // ### RULE
@@ -134,7 +134,7 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
             // Create all the normal pits
             for(int normalPitIndex = 0; normalPitIndex < 6; normalPitIndex++) {
                 // Prepare a normal pit
-                IKalahaPit normalPit = new KalahaPit(new OnChangedProcedureHelper());
+                IKalahaPit normalPit = new KalahaPit(new TriggerProcedureOnChange());
                 normalPit.SetPlayer(player);
                 // ### RULE
                 // When the changed pit is the players own and empty, then schedule
@@ -159,6 +159,10 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
         //Game.Pits().
 
     }
+
+    // Turn structure
+    // Do a streams analysis on transforms.filter(PitTransform p -> p.Amount == 0)
+    // If so game is over
 
     private void Capture(IKalahaPit normalPit, ITurn turn){//IPitCollection pits) {
         turn.pits().Opposite(normalPit);
