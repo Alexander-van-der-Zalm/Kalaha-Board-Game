@@ -27,7 +27,6 @@ interface ITurn{
 
 interface ITransformCollection{
     List<ITransform> Transforms();
-    IPitTransform Last(); // Move to util
 }
 
 interface ITransform{
@@ -119,13 +118,14 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
             // if it is the last pit happens to be the players own kalaha. If so that player gets another
             // turn.
             kalaha.OnChanged().AddProcedure(
-                    // Add OwnKalaha check here (slightly optimized).
-                    () -> Game.Turn().EndOfTurn().ScheduleMethod(
-                            (turn) -> {
-                                if(OwnKalaha(LastPit(turn)))
-                                    ExtraTurn(turn);
-                            }
-                    )
+                // Add OwnKalaha check here (slightly optimized).
+                () -> {
+                    if(OwnKalaha(kalaha)){
+                        Game.Turn().EndOfTurn().ScheduleMethod(
+                            (turn) ->  ExtraTurn(turn)
+                        );
+                    }
+                }
             );
             // Add to pit collection
             pits.add(kalaha);
@@ -174,10 +174,6 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
     // Move to util?
     private Boolean OwnKalaha(IKalahaPit p) {
         return p.IsKalaha();
-    }
-
-    private IKalahaPit LastPit(ITurn turn){
-        return turn.Transforms().Last().Pit();
     }
 
     private void ExtraTurn(ITurn turn){
