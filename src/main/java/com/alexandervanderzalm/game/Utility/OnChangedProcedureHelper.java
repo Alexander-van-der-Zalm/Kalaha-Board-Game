@@ -15,12 +15,12 @@ public class OnChangedProcedureHelper implements ITriggerProcedureOnChange {
     }
 
     @Override
-    public void AddOnChangedProcedure(Procedure p) {
+    public void AddProcedure(Procedure p) {
         onChangedProcedures.add(p);
     }
 
     @Override
-    public void RemoveOnChangedProcedure(Procedure p) {
+    public void RemoveProcedure(Procedure p) {
         onChangedProcedures.remove(p);
     }
 }

@@ -4,6 +4,6 @@ import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
 
 public interface ITriggerProcedureOnChange {
     void TriggerOnChangedProcedures();
-    void AddOnChangedProcedure(Procedure p);
-    void RemoveOnChangedProcedure(Procedure p);
+    void AddProcedure(Procedure p);
+    void RemoveProcedure(Procedure p);
 }

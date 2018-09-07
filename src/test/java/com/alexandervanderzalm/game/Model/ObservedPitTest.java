@@ -12,7 +12,7 @@ class ObservedPitTest {
     void add_AddedEvent_FiredEventOnChange() {
         // Setup
         ObservedPit p = new ObservedPit(new OnChangedProcedureHelper());
-        p.OnChanged.AddOnChangedProcedure(() -> ChangeLogger +=1 );
+        p.OnChanged.AddProcedure(() -> ChangeLogger +=1 );
         ChangeLogger = 0;
 
         // Test Basic functionality
@@ -27,7 +27,7 @@ class ObservedPitTest {
     void grabAll_AddedEvent_FiredEventOnChange() {
         // Setup
         ObservedPit p = new ObservedPit(new OnChangedProcedureHelper());
-        p.OnChanged.AddOnChangedProcedure(() -> ChangeLogger +=1 );
+        p.OnChanged.AddProcedure(() -> ChangeLogger +=1 );
         ChangeLogger = 0;
 
         // Test Basic functionality
