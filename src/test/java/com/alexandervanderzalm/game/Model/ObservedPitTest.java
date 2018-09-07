@@ -4,8 +4,6 @@ import com.alexandervanderzalm.game.Utility.OnChangedProcedureHelper;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ObservedPitTest {
 
     private Integer ChangeLogger = 0;
@@ -14,7 +12,7 @@ class ObservedPitTest {
     void add_AddedEvent_FiredEventOnChange() {
         // Setup
         ObservedPit p = new ObservedPit(new OnChangedProcedureHelper());
-        p.OnChangedHelper.AddOnChangedProcedure(() -> ChangeLogger +=1 );
+        p.OnChanged.AddOnChangedProcedure(() -> ChangeLogger +=1 );
         ChangeLogger = 0;
 
         // Test Basic functionality
@@ -29,7 +27,7 @@ class ObservedPitTest {
     void grabAll_AddedEvent_FiredEventOnChange() {
         // Setup
         ObservedPit p = new ObservedPit(new OnChangedProcedureHelper());
-        p.OnChangedHelper.AddOnChangedProcedure(() -> ChangeLogger +=1 );
+        p.OnChanged.AddOnChangedProcedure(() -> ChangeLogger +=1 );
         ChangeLogger = 0;
 
         // Test Basic functionality

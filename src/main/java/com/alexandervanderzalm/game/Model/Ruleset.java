@@ -1,5 +1,10 @@
 package com.alexandervanderzalm.game.Model;
 
+interface  IRuleSet{
+    void SetupGame();
+    // Turn Structure?
+}
+
 public class Ruleset {
 
     // TODO
@@ -17,12 +22,12 @@ public class Ruleset {
                               <- PitCollection.OnDirty.Add(turn.EndOfTurn, ###ENDOFGAME? -> ENDGAME/HARVEST
 
         // TODO
-        // - ObserveChange
-        // - EventScheduler<T> (optional priority sorting?)
-        // - ObserveChangeCollection
-        // - TurnUtil   - CurrentPit,OppositePit (turn) -> use PitCollection & transformdata
-        // - PitUtil    - OwnEmpty, OwnKalaha (pit)
-        // - ActionsService/Util
+        // V - ObserveChange
+        // X - EventScheduler<T> (optional priority sorting?)
+        // X - ObserveChangeCollection
+        // X - TurnUtil   - CurrentPit,OppositePit (turn) -> use PitCollection & transformdata
+        // X - PitUtil    - OwnEmpty, OwnKalaha (pit)
+        // X - ActionsService/Util
                             <- PitCollection.OnCha
     }
      */

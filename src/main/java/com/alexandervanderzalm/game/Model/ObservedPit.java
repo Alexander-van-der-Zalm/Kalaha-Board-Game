@@ -1,25 +1,24 @@
 package com.alexandervanderzalm.game.Model;
 
-import com.alexandervanderzalm.game.Utility.IObserveChange;
-import com.alexandervanderzalm.game.Utility.OnChangedProcedureHelper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.alexandervanderzalm.game.Utility.ITriggerProcedureOnChange;
 
 public class ObservedPit extends Pit {
 
-    public IObserveChange OnChangedHelper;// = new OnChangedProcedureHelper();
+    // Helper for triggering procedures on change
+    public ITriggerProcedureOnChange OnChanged;
 
-    public ObservedPit(IObserveChange onChangedHelper) {
-        OnChangedHelper = onChangedHelper;
+    public ObservedPit(ITriggerProcedureOnChange onChangedHelper) {
+        OnChanged = onChangedHelper;
     }
 
     public void Add(Integer stones){
         super.Add(stones);
-        OnChangedHelper.OnChanged();
+        OnChanged.TriggerOnChangedProcedures();
     }
 
     public Integer GrabAll() {
         Integer result = super.GrabAll();
-        OnChangedHelper.OnChanged();
+        OnChanged.TriggerOnChangedProcedures();
         return result;
     }
 }

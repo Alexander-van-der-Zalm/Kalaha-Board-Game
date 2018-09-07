@@ -3,12 +3,12 @@ package com.alexandervanderzalm.game.Utility;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OnChangedProcedureHelper implements IObserveChange{
+public class OnChangedProcedureHelper implements ITriggerProcedureOnChange {
 
     private List<Procedure> onChangedProcedures = new ArrayList<Procedure>();
 
     @Override
-    public void OnChanged() {
+    public void TriggerOnChangedProcedures() {
         onChangedProcedures.forEach((p) -> p.Process());
     }
 
