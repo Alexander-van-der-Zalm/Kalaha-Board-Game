@@ -1,16 +1,19 @@
 package com.alexandervanderzalm.game.Model;
 
 
+import java.util.List;
+
 public class TurnData {
-    // Previous
-    // Next
+    // Previous TurnData
+    // Next TurnData
+
     public int Player1Score;
     public int Player2Score;
-    public GameState StartOfTurnState; // Get this from previous?
-    public GameState EndOfTurnState;
+    public GameState NextTurnState;
+    public List<KalahaPitData> Pits;
+
     //public Function<Boolean,Boolean> func;
 
-    public String Test;
     // public int TurnCount??
     // BucketResult
     // Transformation sequence

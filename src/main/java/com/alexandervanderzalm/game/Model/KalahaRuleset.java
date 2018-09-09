@@ -1,5 +1,6 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Utility.IMethodCollection;
 import com.alexandervanderzalm.game.Utility.IMethodScheduler;
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
@@ -13,16 +14,27 @@ interface IRuleSet<T>{
 }
 
 interface IKalahaGame{
-    IPitCollection<IKalahaPit> Pits();
-    ITurn Turn();
+    //IPitCollection<IKalahaPit> Pits();
+    ITurn Turn(); // get/set? how to store
+    IKalahaActions Actions();
+}
+
+interface IKalahaActions{
+    IMethodCollection<ITurn> ExtraTurn();//can this be a procedure instead?
 }
 
 interface ITurn{
+    // Functionality
     IMethodScheduler<ITurn> EndOfTurn();
+
+    // Actual Data Object
+    TurnData Data();
+
+    // Shortcuts -- Maybe move to Data?
     ITransformCollection Transforms();
     Integer Player();
 
-    IPitCollection<IKalahaPit> pits(); // Should this be in IKalahaTurn?
+    IPitCollection<IKalahaPit> pits(); // Should this be in IKalahaTurn? -> maybe move to data?
 }
 
 interface ITransformCollection{
@@ -32,48 +44,6 @@ interface ITransformCollection{
 interface ITransform{
     String GetLog();
     void SetLog(String log);
-}
-
-interface IKalahaPit extends IObservedPit<Integer>{
-    Boolean IsKalaha();
-    void MakeKalaha();
-    Integer GetPlayer();
-    void SetPlayer(Integer player);
-}
-
-class KalahaPit extends ObservedPit implements IKalahaPit{
-
-    private Integer player = 0;
-    private Boolean isKalaha = false;
-
-    public KalahaPit(IProcedureCollection onChangedHelper) {
-        super(onChangedHelper);
-    }
-
-    @Override
-    public Boolean IsKalaha() {
-        return isKalaha;
-    }
-
-    @Override
-    public void MakeKalaha() {
-        isKalaha = true;
-    }
-
-    @Override
-    public Integer GetPlayer() {
-        return player;
-    }
-
-    @Override
-    public void SetPlayer(Integer player) {
-        this.player = player;
-    }
-
-    @Override
-    public IProcedureCollection OnChanged() {
-        return super.OnChanged;
-    }
 }
 
 class NormalTransform implements ITransform{
@@ -107,6 +77,8 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
 
     @Override
     public void SetupGame(T Game) {
+
+        // Setup board
         List<IKalahaPit> pits = new ArrayList<>();
 
         for(int player = 0; player<2; player++) {
@@ -155,6 +127,9 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
             }
         }
 
+        // Setup actions
+        //Game.Actions().ExtraTurn().Add((turn) -> );
+
         // TODO add all pits to the games/turns pit collection
         //Game.Pits().
 
@@ -181,6 +156,7 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
     }
 
     private void ExtraTurn(ITurn turn){
+
         // TODO extra turn logic
         turn.Transforms().Transforms().add(new NormalTransform("Extra turn"));
     }

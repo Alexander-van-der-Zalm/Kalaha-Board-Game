@@ -8,7 +8,7 @@ class ObservedPitTest {
 
     private Integer ChangeLogger = 0;
 
-    @Test
+/*    @Test
     void add_AddedEvent_FiredEventOnChange() {
         // Setup
         ObservedPit p = new ObservedPit(new ProcedureCollection());
@@ -39,5 +39,5 @@ class ObservedPitTest {
 
         // Test events triggered
         Assert.isTrue(ChangeLogger== 2, "CheckedIfEventTriggeredTwoTimes");
-    }
+    }*/
 }
