@@ -1,7 +1,7 @@
 package com.alexandervanderzalm.game.Model;
 
-import com.alexandervanderzalm.game.Utility.ITriggerProcedureOnChange;
+import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 
 public interface IObservedPit<T> extends IPit<T>{
-    ITriggerProcedureOnChange OnChanged();
+    IProcedureCollection OnChanged();
 }

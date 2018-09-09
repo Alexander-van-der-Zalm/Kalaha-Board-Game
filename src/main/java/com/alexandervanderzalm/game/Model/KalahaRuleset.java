@@ -1,8 +1,8 @@
 package com.alexandervanderzalm.game.Model;
 
 import com.alexandervanderzalm.game.Utility.IMethodScheduler;
-import com.alexandervanderzalm.game.Utility.ITriggerProcedureOnChange;
-import com.alexandervanderzalm.game.Utility.TriggerProcedureOnChange;
+import com.alexandervanderzalm.game.Utility.IProcedureCollection;
+import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +46,7 @@ class KalahaPit extends ObservedPit implements IKalahaPit{
     private Integer player = 0;
     private Boolean isKalaha = false;
 
-    public KalahaPit(ITriggerProcedureOnChange onChangedHelper) {
+    public KalahaPit(IProcedureCollection onChangedHelper) {
         super(onChangedHelper);
     }
 
@@ -71,7 +71,7 @@ class KalahaPit extends ObservedPit implements IKalahaPit{
     }
 
     @Override
-    public ITriggerProcedureOnChange OnChanged() {
+    public IProcedureCollection OnChanged() {
         return super.OnChanged;
     }
 }
@@ -110,14 +110,14 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
         List<IKalahaPit> pits = new ArrayList<>();
 
         for(int player = 0; player<2; player++) {
-            IKalahaPit kalaha = new KalahaPit(new TriggerProcedureOnChange());
+            IKalahaPit kalaha = new KalahaPit(new ProcedureCollection());
             kalaha.MakeKalaha();
             kalaha.SetPlayer(player);
             // ### RULE
             // Whenever a kalaha pit gets changed. Schedule a method for the end of the turn that checks
             // if it is the last pit happens to be the players own kalaha. If so that player gets another
             // turn.
-            kalaha.OnChanged().AddProcedure(
+            kalaha.OnChanged().Add(
                 // Add OwnKalaha check here (slightly optimized).
                 () -> {
                     if(OwnKalaha(kalaha)){
@@ -134,13 +134,13 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
             // Create all the normal pits
             for(int normalPitIndex = 0; normalPitIndex < 6; normalPitIndex++) {
                 // Prepare a normal pit
-                IKalahaPit normalPit = new KalahaPit(new TriggerProcedureOnChange());
+                IKalahaPit normalPit = new KalahaPit(new ProcedureCollection());
                 normalPit.SetPlayer(player);
                 // ### RULE
                 // When the changed pit is the players own and empty, then schedule
                 // a capture action (move the stones of the opposite pit to this pit).
                 // TODO check if it is actually the players turn... (I think thats already there)
-                normalPit.OnChanged().AddProcedure(
+                normalPit.OnChanged().Add(
                     () -> {
                         if(OwnEmpty(normalPit, Game.Turn().Player())){
                             Game.Turn().EndOfTurn().ScheduleMethod(

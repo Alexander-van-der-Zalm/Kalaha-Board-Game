@@ -23,17 +23,17 @@ public class TriggerSingleProcedureOnChangeOfAnyElementInSingle<T extends IObser
     @Override
     public void add(T item) {
         collection.add(item);
-        item.OnChanged().AddProcedure(SetDirty);
+        item.OnChanged().Add(SetDirty);
     }
 
     @Override
     public void remove(T item) {
         collection.remove(item);
-        item.OnChanged().RemoveProcedure(SetDirty);
+        item.OnChanged().Remove(SetDirty);
     }
 
     @Override
-    public ITriggerProcedureOnChange OnChanged() {
+    public IProcedureCollection OnChanged() {
         return null;
     }
 }

@@ -5,22 +5,22 @@ import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TriggerProcedureOnChange implements ITriggerProcedureOnChange {
+public class ProcedureCollection implements IProcedureCollection {
 
     private List<Procedure> onChangedProcedures = new ArrayList<Procedure>();
 
     @Override
-    public void TriggerOnChangedProcedures() {
+    public void Process() {
         onChangedProcedures.forEach((p) -> p.Process());
     }
 
     @Override
-    public void AddProcedure(Procedure p) {
+    public void Add(Procedure p) {
         onChangedProcedures.add(p);
     }
 
     @Override
-    public void RemoveProcedure(Procedure p) {
+    public void Remove(Procedure p) {
         onChangedProcedures.remove(p);
     }
 }
