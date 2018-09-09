@@ -16,6 +16,7 @@ public class KalahaPit implements IKalahaPit{
 
     public KalahaPit(IProcedureCollection onChanged) {
         OnChanged = onChanged;
+        Data = new KalahaPitData();
     }
 
     @Override

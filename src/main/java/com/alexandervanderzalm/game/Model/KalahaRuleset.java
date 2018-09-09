@@ -1,6 +1,5 @@
 package com.alexandervanderzalm.game.Model;
 
-import com.alexandervanderzalm.game.Utility.IMethodCollection;
 import com.alexandervanderzalm.game.Utility.IMethodScheduler;
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
@@ -8,75 +7,51 @@ import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 import java.util.ArrayList;
 import java.util.List;
 
-interface IRuleSet<T>{
+interface IRuleSet<T extends IGame>{
     void SetupGame(T Game);
     // Turn Structure?
 }
 
-interface IKalahaGame{
-    //IPitCollection<IKalahaPit> Pits();
-    ITurn Turn(); // get/set? how to store
+interface IKalahaGame extends IGame{
+    IPitCollection<IKalahaPit> Pits();
     IKalahaActions Actions();
+    ITurn CurrentTurn(); // get/set? how to store
 }
 
 interface IKalahaActions{
-    IMethodCollection<ITurn> ExtraTurn();//can this be a procedure instead?
+    IProcedureCollection ExtraTurn();//can this be a procedure instead?
+    IProcedureCollection Capture();
+    IProcedureCollection EndGame();
 }
 
 interface ITurn{
     // Functionality
     IMethodScheduler<ITurn> EndOfTurn();
 
+
     // Actual Data Object
-    TurnData Data();
+    //TurnData Data();
 
     // Shortcuts -- Maybe move to Data?
+    //IKalahaActions Actions();
     ITransformCollection Transforms();
     Integer Player();
-
     IPitCollection<IKalahaPit> pits(); // Should this be in IKalahaTurn? -> maybe move to data?
-}
-
-interface ITransformCollection{
-    List<ITransform> Transforms();
-}
-
-interface ITransform{
-    String GetLog();
-    void SetLog(String log);
-}
-
-class NormalTransform implements ITransform{
-    // TODO Make jpa entity
-    // TODO transform id
-    // TODO turn id
-    // TODO game id
-
-    public NormalTransform(String log) {
-        this.log = log;
-    }
-
-    private String log;
-
-    @Override
-    public String GetLog() {
-        return log;
-    }
-
-    @Override
-    public void SetLog(String log) {
-        this.log = log;
-    }
-}
-
-interface IPitTransform extends ITransform{
-    IKalahaPit Pit();
 }
 
 public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
 
     @Override
-    public void SetupGame(T Game) {
+    public void SetupGame(IKalahaGame Game) {
+        // Setup actions
+        Game.Actions().ExtraTurn().Add(() -> {
+            Game.CurrentTurn().EndOfTurn().ScheduleMethod((turn) -> {
+                if (turn.Player() == 0)
+                    TurnUtil.SetGameState(turn, GameState.TurnP1);
+                else //if(turn.Player() == 1)
+                    TurnUtil.SetGameState(turn, GameState.TurnP2);
+            });
+        });
 
         // Setup board
         List<IKalahaPit> pits = new ArrayList<>();
@@ -90,15 +65,14 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
             // if it is the last pit happens to be the players own kalaha. If so that player gets another
             // turn.
             kalaha.OnChanged().Add(
-                // Add OwnKalaha check here (slightly optimized).
                 () -> {
-                    if(OwnKalaha(kalaha)){
-                        Game.Turn().EndOfTurn().ScheduleMethod(
+                if(OwnKalaha(kalaha)){
+                    Game.CurrentTurn().EndOfTurn().ScheduleMethod(
                             (turn) ->  ExtraTurn(turn)
-                        );
-                    }
+                    );
                 }
-            );
+            });
+
             // Add to pit collection
             pits.add(kalaha);
 
@@ -114,8 +88,8 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
                 // TODO check if it is actually the players turn... (I think thats already there)
                 normalPit.OnChanged().Add(
                     () -> {
-                        if(OwnEmpty(normalPit, Game.Turn().Player())){
-                            Game.Turn().EndOfTurn().ScheduleMethod(
+                        if(OwnEmpty(normalPit, Game.CurrentTurn().Player())){
+                            Game.CurrentTurn().EndOfTurn().ScheduleMethod(
                                 (turn) -> Capture(normalPit, turn)
                             );
                         }
@@ -156,7 +130,6 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
     }
 
     private void ExtraTurn(ITurn turn){
-
         // TODO extra turn logic
         turn.Transforms().Transforms().add(new NormalTransform("Extra turn"));
     }
