@@ -19,17 +19,18 @@ public class SimpleGame implements IGame{
     @Override
     public TurnData InitializeGame() {
 
-        int boardSize = 14;
-        for (int i = 0; i < boardSize; i++) {
-            pits.add(new KalahaPit(new ProcedureCollection()));
-            if(i == 0 || i == 7)
-                pits.get(i).MakeKalaha();
-            else
-                pits.get(i).Add(6);
-        }
-        for (int i = 7; i < boardSize; i++) {
-            pits.get(i).SetPlayer(1);
-        }
+        pits = PitUtil.CreatePits(14,6);
+//        int boardSize = 14;
+//        for (int i = 0; i < boardSize; i++) {
+//            pits.add(new KalahaPit(new ProcedureCollection()));
+//            if(i == 0 || i == 7)
+//                pits.get(i).MakeKalaha();
+//            else
+//                pits.get(i).Add(6);
+//        }
+//        for (int i = 7; i < boardSize; i++) {
+//            pits.get(i).SetPlayer(1);
+//        }
 
         nextTurnState = GameState.TurnP1;
 
@@ -59,7 +60,7 @@ public class SimpleGame implements IGame{
         data.Pits = pits.stream().map(x -> x.Data()).collect(Collectors.toList());
         data.NextTurnState = nextTurnState;
         data.Player1Score = pits.get(0).Amount();
-        data.Player2Score = pits.get(7).Amount();
+        data.Player2Score = pits.get(pits.size()/2).Amount();
         return data;
     }
 
