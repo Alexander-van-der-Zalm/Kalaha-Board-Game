@@ -5,69 +5,110 @@
     <title>Kalaha Board Game</title>
 </head>
 <style>
-/*
-.Kalaha-left    { grid-area: kalaha-left; }
-.Kalaha-right   { grid-area: kalaha-right; }
-.Pit-top        { grid-area: pit-top; }
-.Pit-bot        { grid-area: pit-bot; }
-.TopUI          { grid-area: ui; }
-*/
-.Pit {
-    background-color: rgba(255,255,255,0.7);
+.Content{
     text-align: center;
-    padding: 20px 0;
-    font-size: 30px;
+    max-width: 800px;
+    vertical-align: middle;
+    margin: auto;
+}
+.TopUI{
+    display:grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    margin: 20px;
+}
+.Normal-Pits{
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 3px;
+}
+.Board{
+    display:grid;
+    grid-template-columns: 1fr 6fr 1fr;
+    grid-gap: 3px;
+    padding: 10px;
+    border: 20px solid #ffff;
+    border-radius: 35px;
+    background-color:
 }
 
 .GameContainer {
-    display:grid;
-    grid-gap: 10px;
-    //grid-template-rows:
-    grid-template-columns: 2;
     background-color: #2196F3;
-
+    padding:20px;
+    font-size: 30px;
+    border-radius: 50px;
 }
-
-.GameContainer > div {
-
-
+.Pit {
+    background-color: rgba(255,255,255,0.7);
+    padding: 20px;
+    margin:0;
+    border: 3px solid #ffff;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.Valid{
+    border: 3px solid #ffff;
+    animation: border-pulsate 2s infinite;
+}
+@keyframes border-pulsate {
+    0%   { border-color: rgba(255, 255, 255, 1); }
+    50%  { border-color: rgba(0, 0, 0, 1); }
+    100% { border-color: rgba(255, 255, 255, 1); }
+}
+.Valid:Hover{
+    background-color: rgba(255,255,255,0.9);
+}
+.Active{
+    border: 3px solid #ffff;
+    border-radius:20px;
+    animation: border-pulsate 2s infinite;
+}
+.Player{
+    border: 3px solid #ffff;
+    border-radius:20px;
+}
+.Flex{
+    display:flex;
+}
+.Rules{
+    Font-size: 20px;
 }
 </style>
-<body>
+<body class="Content">
     <div class="Info">
-
+        <H1>Kalaha Board Game</H1>
     </div>
     <div class="GameContainer">
         <div class="TopUI">
-            <div class="UI-Element">Score P1: 10</div>
-            <div class="UI-Element">Score P2: 10</div>
-            <div class="UI-Element">Turn: 10</div>
+            <div class="UI-Element Player P1 Active">P1 Score: 0</div>
+            <div class="UI-Element ">Turn: 10</div>
+            <div class="UI-Element Player P2">P2 Score: 0</div>
         </div>
         <div class="Board">
-            <div class="Kalaha-left Pit>0</div>
-            <div class="Pit-top">
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
+            <div class="Kalaha-left Pit">0</div>
+            <div class="Normal-Pits">
+                <div class="Pit P1 Valid">6</div>
+                <div class="Pit P1 Valid">6</div>
+                <div class="Pit P1 Valid">6</div>
+                <div class="Pit P1 Valid">6</div>
+                <div class="Pit P1 Valid">6</div>
+                <div class="Pit P1 Valid">6</div>
+                <div class="Pit P2">6</div>
+                <div class="Pit P2">6</div>
+                <div class="Pit P2">6</div>
+                <div class="Pit P2">6</div>
+                <div class="Pit P2">6</div>
+                <div class="Pit P2">6</div>
             </div>
-
             <div class="Kalaha-right Pit">0</div>
-            <div class="Pit-bot">
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-                <div class="Pit">6</div>
-            </div>>
+        </div>
+        <div class="Rules">
+            <p>Rules explained here: <br/>
+                Blabla<br/>
+                BlablaS<br/>
+            </p>
         </div>
     </div>
-    <div class="Rules">
-
-    </div>
-    <p>Game data: <a href="/game">here</a></p>
 </body>
 </html>

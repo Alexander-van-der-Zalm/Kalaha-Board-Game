@@ -30,5 +30,6 @@ targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    runtime("org.springframework.boot:spring-boot-devtools")
     testCompile("junit:junit")
 }
