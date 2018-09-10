@@ -8,6 +8,8 @@ public interface IPitCollection<T extends IPit> {
     public T Left(T pit);
     public T Opposite(int index);
     public T Opposite(T pit);
+    public T KalahaOfPlayer1();
+    public T KalahaOfPlayer2();
 
     public T Get(int index);
 }

@@ -56,7 +56,9 @@ public class KalahaPit implements IKalahaPit{
 
     @Override
     public Integer GrabAll() {
-        return Data.stones;
+        Integer grabbed = Data.stones;
+        Data.stones = 0;
+        return grabbed;
     }
 
     @Override

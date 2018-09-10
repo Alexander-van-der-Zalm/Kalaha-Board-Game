@@ -22,7 +22,10 @@ public class GameService {
     }
 
     public TurnData DoTurn(TurnInputData input) {
-        return CreateFauxData();
+        // Validate valid input
+
+        // If so do the actual turn
+        return game.DoTurn(input.SelectedBucket);
     }
 
     private TurnData CreateFauxData(){
