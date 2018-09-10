@@ -94,9 +94,9 @@
     </div>
     <div class="GameContainer">
         <div class="TopUI">
-            <div class="UI-Element Player P1 Active">P1 Score: 0</div>
+            <div class="UI-Element Player1Score Player P1 Active">P1 Score: 0</div>
             <div class="UI-Element ">Turn: 10</div>
-            <div class="UI-Element Player P2">P2 Score: 0</div>
+            <div class="UI-Element Player2Score Player P2">P2 Score: 0</div>
         </div>
         <div class="Board">
             <div class="Kalaha-left Pit" value="0">0</div>
@@ -127,6 +127,8 @@
     
     var activePlayer = 0;
     var errorLog;
+    var p1Score = document.getElementsByClassName("Player1Score")[0];
+    var p2Score = document.getElementsByClassName("Player2Score")[0];
     var pits;
     SetupGame();
     function SetupGame(){
@@ -163,13 +165,34 @@
         }
     }
 
-    function AssignValuesToPits(gameState){
-        console.log("AssignValuesToPits");
+    function SetGameViewFromJSON(gameState){
+        console.log("SetGameViewFromJSON");
+        activePlayer = gameState.NextTurnState == "TurnP1" ? 0 : 1;
+        
         pits.forEach(element => {
-            //console.log(element.innerHTML);
-            //console.log(gameState.Pits[element.value].stones);
             element.innerHTML = gameState.Pits[element.value].stones;
+            
+            if(element.classList.contains("P1") && activePlayer == 0 || 
+               element.classList.contains("P2") && activePlayer == 1){
+                element.classList.add("Valid");
+            }else{
+                element.classList.remove("Valid");
+            }
         });
+        p1Score.innerHTML = "P1 Score: " + gameState.Player1Score;
+        p2Score.innerHTML = "P2 Score: " + gameState.Player2Score;
+        // Set the right player active
+        
+        IfTrueAddElseRemoveClass(p1Score, "Active", activePlayer == 0);
+        IfTrueAddElseRemoveClass(p2Score, "Active", activePlayer == 1);
+    }
+
+    function IfTrueAddElseRemoveClass(element, className, condition){
+        if(condition){
+            element.classList.add(className);
+        }else{
+            element.classList.remove(className);
+        }
     }
 
     function GetGame(){
@@ -179,7 +202,7 @@
         .then(response => response.json())
         .then(data =>{
             console.log(data);
-            AssignValuesToPits(data);
+            SetGameViewFromJSON(data);
         }).catch(error => console.log(error))
         return result;
     }
@@ -193,7 +216,7 @@
             "ClientHash": 0
         }).then(data => {
             console.log(data);
-            AssignValuesToPits(data);
+            SetGameViewFromJSON(data);
         }) .catch(error => console.log(error));
     }
 

@@ -26,11 +26,11 @@ public class PitUtil {
     }
 
     public static int Right(int size, int index){
-        return ((index + 1)%size);
+        return ((index - 1 + size)%size);
     }
 
     public static int Left(int size, int index){
-        return ((index - 1 + size)%size);
+        return ((index + 1 + size)%size);
     }
 
     public static int Opposite(int size, int index){
