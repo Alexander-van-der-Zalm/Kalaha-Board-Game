@@ -170,14 +170,19 @@
         activePlayer = gameState.NextTurnState == "TurnP1" ? 0 : 1;
         
         pits.forEach(element => {
-            element.innerHTML = gameState.Pits[element.value].stones;
+            var curStones = gameState.Pits[element.value].stones
+            element.innerHTML = curStones;
             
-            if(element.classList.contains("P1") && activePlayer == 0 || 
-               element.classList.contains("P2") && activePlayer == 1){
+            IfTrueAddElseRemoveClass(element, "Valid",
+                element.classList.contains("P1") && activePlayer == 0 && curStones > 0|| 
+                element.classList.contains("P2") && activePlayer == 1 && curStones > 0);
+            /*    
+            if(element.classList.contains("P1") && activePlayer == 0 && curStones > 0|| 
+               element.classList.contains("P2") && activePlayer == 1 && curStones > 0){
                 element.classList.add("Valid");
             }else{
                 element.classList.remove("Valid");
-            }
+            }*/
         });
         p1Score.innerHTML = "P1 Score: " + gameState.Player1Score;
         p2Score.innerHTML = "P2 Score: " + gameState.Player2Score;
