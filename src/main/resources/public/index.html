@@ -166,7 +166,9 @@
     function AssignValuesToPits(gameState){
         console.log("AssignValuesToPits");
         pits.forEach(element => {
-            console.log(element.innerHTML);
+            //console.log(element.innerHTML);
+            //console.log(gameState.Pits[element.value].stones);
+            element.innerHTML = gameState.Pits[element.value].stones;
         });
     }
 
