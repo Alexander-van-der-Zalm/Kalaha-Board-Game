@@ -28,7 +28,6 @@
     padding: 10px;
     border: 20px solid #ffff;
     border-radius: 35px;
-    background-color:
 }
 
 .GameContainer {
@@ -75,6 +74,7 @@
     Font-size: 20px;
 }
 </style>
+
 <body class="Content">
     <div class="Info">
         <H1>Kalaha Board Game</H1>
@@ -111,4 +111,55 @@
         </div>
     </div>
 </body>
+
+<script type="text/javascript" language="JavaScript">
+    GetGame();
+
+    var pits = document.getElementsByClassName("Pit");
+    
+    //Array.prototype.forEach.call(pits,)
+    for(var i = 0; i < pits.length; i++){
+        console.log(pits[i])
+        console.log(i);
+        pits[i].value = i;
+        pits[i].onclick = function(){
+            console.log(this.value);
+        }
+    }
+
+    function GetGame(){
+        console.log("GetGame");
+        var result;
+        fetch('/game')
+        .then(response => response.json())
+        .then(data =>{
+            result = data;
+            console.log(data);
+        }).catch(error => console.log(error))
+    }
+
+    function PostGame(Index, Player){
+        console.log("PostGame");
+        var result;
+        postRequest('/game',{
+            "SelectedBucket": Index,
+            "PlayerID": Player,
+            "ClientHash": 0
+        }).then(data => console.log(data))
+        .catch(error => console.log(error));
+    }
+
+    function postRequest(url, data){
+        return fetch(url, {
+            credential: 'same-origin',
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: new Headers({
+                'Content-Type':'application/json'
+            }),
+        }).then(response => response.json())
+    }
+
+</script>
+
 </html>
