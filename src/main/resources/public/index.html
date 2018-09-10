@@ -23,7 +23,8 @@
 }
 .Board{
     display:grid;
-    grid-template-columns: 1fr 6fr 1fr;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(2, 1fr);
     grid-gap: 3px;
     padding: 10px;
     border: 20px solid #ffff;
@@ -35,6 +36,18 @@
     padding:20px;
     font-size: 30px;
     border-radius: 50px;
+}
+.Kalaha-left{
+    grid-column-start:1;
+    grid-column-end:2;
+    grid-row-start:1;
+    grid-row-end:3;
+}
+.Kalaha-right{
+    grid-column-start:8;
+    grid-column-end:9;
+    grid-row-start:1;
+    grid-row-end:3;
 }
 .Pit {
     background-color: rgba(255,255,255,0.7);
@@ -86,22 +99,20 @@
             <div class="UI-Element Player P2">P2 Score: 0</div>
         </div>
         <div class="Board">
-            <div class="Kalaha-left Pit">0</div>
-            <div class="Normal-Pits">
-                <div class="Pit P1 Valid">6</div>
-                <div class="Pit P1 Valid">6</div>
-                <div class="Pit P1 Valid">6</div>
-                <div class="Pit P1 Valid">6</div>
-                <div class="Pit P1 Valid">6</div>
-                <div class="Pit P1 Valid">6</div>
-                <div class="Pit P2">6</div>
-                <div class="Pit P2">6</div>
-                <div class="Pit P2">6</div>
-                <div class="Pit P2">6</div>
-                <div class="Pit P2">6</div>
-                <div class="Pit P2">6</div>
-            </div>
+            <div class="Kalaha-left Pit" value="0">0</div>
+            <div class="Pit P1 Valid" value="1">6</div>
+            <div class="Pit P1 Valid" value="2">6</div>
+            <div class="Pit P1 Valid" value="3">6</div>
+            <div class="Pit P1 Valid">6</div>
+            <div class="Pit P1 Valid">6</div>
+            <div class="Pit P1 Valid">6</div>
             <div class="Kalaha-right Pit">0</div>
+            <div class="Pit P2">6</div>
+            <div class="Pit P2">6</div>
+            <div class="Pit P2">6</div>
+            <div class="Pit P2">6</div>
+            <div class="Pit P2">6</div>
+            <div class="Pit P2">6</div>
         </div>
         <div class="Rules">
             <p>Rules explained here: <br/>
@@ -113,18 +124,40 @@
 </body>
 
 <script type="text/javascript" language="JavaScript">
-    GetGame();
-
-    var pits = document.getElementsByClassName("Pit");
     
-    //Array.prototype.forEach.call(pits,)
-    for(var i = 0; i < pits.length; i++){
-        console.log(pits[i])
-        console.log(i);
-        pits[i].value = i;
-        pits[i].onclick = function(){
-            console.log(this.value);
+    var activePlayer = 0;
+    var errorLog;
+    var pits;
+    SetupGame();
+    function SetupGame(){
+        GetGame();       
+        PreparePitFunctionality();
+    }
+
+    function PreparePitFunctionality(){
+        pits = document.getElementsByClassName("Pit");
+        for(var i = 0; i < pits.length; i++){
+            console.log(pits[i])
+            console.log(i);
+            if(i < 8)
+                pits[i].value = i;
+            else
+                pits[i].value = 13 - i + 8;
+            pits[i].onclick = function(){
+                if(this.classList.contains("Valid")){
+                    PostGame(this.value, activePlayer);
+                }
+                else{
+                    console.log("Invalid Move");
+                    console.log(this.value);
+                }
+            }
         }
+    }
+
+    function AssignValuesToPits(gameState){
+        console.log("AssignValuesToPits");
+
     }
 
     function GetGame(){
@@ -133,9 +166,10 @@
         fetch('/game')
         .then(response => response.json())
         .then(data =>{
-            result = data;
             console.log(data);
+            AssignValuesToPits(data);
         }).catch(error => console.log(error))
+        return result;
     }
 
     function PostGame(Index, Player){
@@ -145,8 +179,10 @@
             "SelectedBucket": Index,
             "PlayerID": Player,
             "ClientHash": 0
-        }).then(data => console.log(data))
-        .catch(error => console.log(error));
+        }).then(data => {
+            console.log(data);
+            AssignValuesToPits(data);
+        }) .catch(error => console.log(error));
     }
 
     function postRequest(url, data){
