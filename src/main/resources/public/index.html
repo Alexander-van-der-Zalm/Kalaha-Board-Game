@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kalaha Board Game</title>
+</head>
+<style>
+/*
+.Kalaha-left    { grid-area: kalaha-left; }
+.Kalaha-right   { grid-area: kalaha-right; }
+.Pit-top        { grid-area: pit-top; }
+.Pit-bot        { grid-area: pit-bot; }
+.TopUI          { grid-area: ui; }
+*/
+.Pit {
+    background-color: rgba(255,255,255,0.7);
+    text-align: center;
+    padding: 20px 0;
+    font-size: 30px;
+}
+
+.GameContainer {
+    display:grid;
+    grid-gap: 10px;
+    //grid-template-rows:
+    grid-template-columns: 2;
+    background-color: #2196F3;
+
+}
+
+.GameContainer > div {
+
+
+}
+</style>
+<body>
+    <div class="Info">
+
+    </div>
+    <div class="GameContainer">
+        <div class="TopUI">
+            <div class="UI-Element">Score P1: 10</div>
+            <div class="UI-Element">Score P2: 10</div>
+            <div class="UI-Element">Turn: 10</div>
+        </div>
+        <div class="Board">
+            <div class="Kalaha-left Pit>0</div>
+            <div class="Pit-top">
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+            </div>
+
+            <div class="Kalaha-right Pit">0</div>
+            <div class="Pit-bot">
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+                <div class="Pit">6</div>
+            </div>>
+        </div>
+    </div>
+    <div class="Rules">
+
+    </div>
+    <p>Game data: <a href="/game">here</a></p>
+</body>
+</html>
