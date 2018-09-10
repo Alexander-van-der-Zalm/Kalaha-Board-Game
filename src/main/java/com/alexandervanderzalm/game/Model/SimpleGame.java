@@ -1,6 +1,8 @@
 package com.alexandervanderzalm.game.Model;
 
+import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SimpleGame implements IGame{
 
@@ -66,11 +68,20 @@ public class SimpleGame implements IGame{
             // Drop stone
             current.Add(1);
             hand--;
-
         }
 
         // Check for end of game
+        //Stream<IKalahaPit> filtered = pits.Pits.stream().filter((p) -> !p.IsKalaha() && p.Amount() == 0);
+        if(pits.Pits.stream().filter((p) -> !p.IsKalaha() && p.Amount() == 0 && p.GetPlayer() == 0).count() == 6 || pits.Pits.stream().filter((p) ->!p.IsKalaha() && p.Amount() == 0 && p.GetPlayer() == 1).count() == 6) {
+            // Add all pits to their respective owners
+            pits.Pits.stream().filter((p) -> !p.IsKalaha()).forEach((p) -> pits.KalahaOfPlayer(p.GetPlayer()).Add(p.GrabAll()));
 
+            if(pits.KalahaOfPlayer1().Amount() > pits.KalahaOfPlayer2().Amount())
+                nextTurnState = GameState.WinP1;
+            else
+                nextTurnState = GameState.WinP2;
+
+        }
         return GameToTurnData();
     }
 

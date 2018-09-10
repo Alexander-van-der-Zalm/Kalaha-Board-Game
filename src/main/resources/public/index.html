@@ -167,7 +167,13 @@
 
     function SetGameViewFromJSON(gameState){
         console.log("SetGameViewFromJSON");
-        activePlayer = gameState.NextTurnState == "TurnP1" ? 0 : 1;
+
+        // Check for a win gameState/whos turn it is
+        if(gameState.NextTurnState == "WinP1" || gameState.NextTurnState == "WinP2"){
+            activePlayer = gameState.NextTurnState == "WinP1" ? -1 : -2;
+        }
+        else
+            activePlayer = gameState.NextTurnState == "TurnP1" ? 0 : 1;
         
         pits.forEach(element => {
             var curStones = gameState.Pits[element.value].stones
@@ -176,20 +182,19 @@
             IfTrueAddElseRemoveClass(element, "Valid",
                 element.classList.contains("P1") && activePlayer == 0 && curStones > 0|| 
                 element.classList.contains("P2") && activePlayer == 1 && curStones > 0);
-            /*    
-            if(element.classList.contains("P1") && activePlayer == 0 && curStones > 0|| 
-               element.classList.contains("P2") && activePlayer == 1 && curStones > 0){
-                element.classList.add("Valid");
-            }else{
-                element.classList.remove("Valid");
-            }*/
         });
+
         p1Score.innerHTML = "P1 Score: " + gameState.Player1Score;
         p2Score.innerHTML = "P2 Score: " + gameState.Player2Score;
+
         // Set the right player active
-        
         IfTrueAddElseRemoveClass(p1Score, "Active", activePlayer == 0);
         IfTrueAddElseRemoveClass(p2Score, "Active", activePlayer == 1);
+
+        if(activePlayer == -1)
+            alert("Congratulations Player1!");
+        if(activePlayer == -2)
+            alert("Congratulations Player2!");
     }
 
     function IfTrueAddElseRemoveClass(element, className, condition){
