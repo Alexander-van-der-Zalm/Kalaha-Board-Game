@@ -135,7 +135,7 @@
     }
 
     function PreparePitFunctionality(){
-        pits = document.getElementsByClassName("Pit");
+        pits = Array.prototype.slice.call(document.getElementsByClassName("Pit"));
         for(var i = 0; i < pits.length; i++){
             console.log(pits[i])
             console.log(i);
@@ -153,11 +153,21 @@
                 }
             }
         }
+        
+        pits.sort((a,b) =>{
+            return a.value < b.value ? -1 : 1;
+        })
+        console.log("Sorted");
+        for(var i = 0; i < pits.length; i++){
+            console.log(pits[i].value)
+        }
     }
 
     function AssignValuesToPits(gameState){
         console.log("AssignValuesToPits");
-
+        pits.forEach(element => {
+            console.log(element.innerHTML);
+        });
     }
 
     function GetGame(){
