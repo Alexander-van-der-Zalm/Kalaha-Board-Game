@@ -44,22 +44,23 @@ public class SimpleGame implements IGame{
                 System.out.println(String.format("Skipped dropping a stone opponents Kalaha @ %s", pits.Pits.indexOf(current)));
                 continue;
             }
-            if(current.GetPlayer() == currentPlayer)
+            if(current.GetPlayer() == currentPlayer && hand == 1)
             {
                 // Extra turn
-                if(current.IsKalaha() && hand == 1){
+                if(current.IsKalaha()){
                     //Extra turn on last stone in hand drop
                     System.out.println(String.format("Extra turn for %s", (currentPlayer == 0 ? "P1" : "P2")));
                     FlipGameState();
-                }
-
-                // Capture opposite
-                if(!current.IsKalaha() && current.Amount() == 0){
-                    // TODO logic
+                } // Capture opposite?
+                else if(current.Amount() == 0){
                     System.out.println(String.format("Capture from %d opposite @ %d ", pits.Pits.indexOf(current), pits.Pits.indexOf(pits.Opposite(current))));
+                    // add both opposite & the last one into own kalaha
+                    pits.KalahaOfPlayer(currentPlayer).Add(pits.Opposite(current).GrabAll() + 1);
+                    //pits.KalahaOfPlayer(currentPlayer).Add();
+                    hand--;
+                    continue;
                 }
             }
-
 
             System.out.println("Dropped a stone @ " + pits.Pits.indexOf(current));
             // Drop stone

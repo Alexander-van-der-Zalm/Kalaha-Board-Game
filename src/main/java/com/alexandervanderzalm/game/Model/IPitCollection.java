@@ -1,5 +1,7 @@
 package com.alexandervanderzalm.game.Model;
 
+import java.util.List;
+
 public interface IPitCollection<T extends IPit> {
 
     public T Right(int index);
@@ -10,6 +12,7 @@ public interface IPitCollection<T extends IPit> {
     public T Opposite(T pit);
     public T KalahaOfPlayer1();
     public T KalahaOfPlayer2();
+    public T KalahaOfPlayer(int currentPlayer);
 
     public T Get(int index);
 }

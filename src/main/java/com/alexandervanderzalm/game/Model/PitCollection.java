@@ -56,6 +56,11 @@ public class PitCollection<T extends IPit> implements IPitCollection<T> {
     }
 
     @Override
+    public T KalahaOfPlayer(int currentPlayer) {
+        return currentPlayer == 0 ? KalahaOfPlayer1() : KalahaOfPlayer2();
+    }
+
+    @Override
     public T Get(int index) {
         return Pits.get(index);
     }
