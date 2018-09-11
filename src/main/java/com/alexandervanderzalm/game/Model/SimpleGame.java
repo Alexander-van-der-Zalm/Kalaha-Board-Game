@@ -51,6 +51,7 @@ public class SimpleGame implements IGame{
         System.out.println("Grabbed pits @ " + SelectedIndex);
         IKalahaPit current = pits.Get(SelectedIndex);
         Integer hand = current.GrabAll();
+        logger.Log(new PitLog(current, pits.IndexOf(current), -hand, current.Amount()));
 
         // Drop one in the right pit except for the opposite players pit
         while(hand > 0) {
@@ -73,8 +74,12 @@ public class SimpleGame implements IGame{
                 else if(current.Amount() == 0){
                     System.out.println(String.format("Capture from %d opposite @ %d ", pits.pList.indexOf(current), pits.pList.indexOf(pits.Opposite(current))));
                     // add both opposite & the last one into own kalaha
-                    pits.KalahaOfPlayer(currentPlayer).Add(pits.Opposite(current).GrabAll() + 1);
-                    //pits.KalahaOfPlayer(currentPlayer).Add();
+                    IKalahaPit opposite = pits.Opposite(current);
+                    int stonesCaptured = opposite.GrabAll();
+                    pits.KalahaOfPlayer(currentPlayer).Add(stonesCaptured + 1);
+                    logger.Log(new PitLog(opposite, pits.IndexOf(opposite), -stonesCaptured, opposite.Amount()));
+                    logger.Log(new PitLog(current, pits.IndexOf(current), stonesCaptured, current.Amount() - 1));
+                    logger.Log(new PitLog(current, pits.IndexOf(current), 1, current.Amount()));
                     hand--;
                     continue;
                 }
@@ -84,6 +89,7 @@ public class SimpleGame implements IGame{
             // Drop stone
             current.Add(1);
             hand--;
+            logger.Log(new PitLog(current, pits.IndexOf(current), 1, current.Amount()));
         }
 
         // Check for end of game

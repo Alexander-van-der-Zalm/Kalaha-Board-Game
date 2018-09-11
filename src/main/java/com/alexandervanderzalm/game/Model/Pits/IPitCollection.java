@@ -11,7 +11,7 @@ public interface IPitCollection<T extends IPit> {
     public T KalahaOfPlayer1();
     public T KalahaOfPlayer2();
     public T KalahaOfPlayer(int currentPlayer);
-
+    public Integer IndexOf(T Pit);
     public T Get(int index);
 }
 

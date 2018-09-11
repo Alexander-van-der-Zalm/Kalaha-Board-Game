@@ -176,7 +176,7 @@
         if(amount > 0){
             StartDropDownAnimation(el, amount, -100, 0, onAnimationEnd);
         }else{
-            StartDropDownAnimation(el, amount, 0, -100, onAnimationEnd);
+            StartDropDownAnimation(el, Math.abs(amount), 0, -100, onAnimationEnd);
         }
     }
 
@@ -205,6 +205,8 @@
     function SetGameViewFromJSONViaTransforms(gameState){
         // Do animation per transform with a delay
         console.log(gameState.Log.length);
+        DisableAllPits();
+
         var animDelay = 0;
         gameState.Log.forEach((e) => {
             console.log(e);
@@ -215,18 +217,15 @@
             animDelay += animSpeedInMS;
         });
         // Finished all set valid
+        setTimeout(() => SetActivePlayerAndPitsToValid(gameState),animDelay);
+        
     }
 
     function SetGameViewFromJSON(gameState){
         console.log("SetGameViewFromJSON");
         SetGameViewFromJSONViaTransforms(gameState);
-        // Check for a win gameState/whos turn it is
-        if(gameState.NextTurnState == "WinP1" || gameState.NextTurnState == "WinP2")
-            activePlayer = gameState.NextTurnState == "WinP1" ? -1 : -2;
-        else
-            activePlayer = gameState.NextTurnState == "TurnP1" ? 0 : 1;
+        return;
         
-        TurnUI.innerHTML = "Player " + (activePlayer == 0? "1" : "2") + " Turn: " + gameState.Turn;
 
         // Change this when received transforms
         pits.forEach(element => {
@@ -250,6 +249,37 @@
             alert("Congratulations Player1!");
         if(activePlayer == -2)
             alert("Congratulations Player2!");
+    }
+
+    function DisableAllPits(){
+        pits.forEach(element => {
+            IfTrueAddElseRemoveClass(element, "Valid",false);
+        });
+    }
+
+    function SetActivePlayerAndPitsToValid(gameState){
+        console.log("SetActivePlayerAndPitsToValid");
+        // Check for a win gameState/whos turn it is
+        if(gameState.NextTurnState == "WinP1" || gameState.NextTurnState == "WinP2")
+            activePlayer = gameState.NextTurnState == "WinP1" ? -1 : -2;
+        else
+            activePlayer = gameState.NextTurnState == "TurnP1" ? 0 : 1;
+        
+        TurnUI.innerHTML = "Player " + (activePlayer == 0? "1" : "2") + " Turn: " + gameState.Turn;
+
+        pits.forEach(element => {   
+            var curStones = gameState.Pits[element.value].stones;         
+            IfTrueAddElseRemoveClass(element, "Valid",
+                element.classList.contains("P1") && activePlayer == 0 && curStones > 0|| 
+                element.classList.contains("P2") && activePlayer == 1 && curStones > 0);
+        });
+
+        p1Score.innerHTML = "P1 Score: " + gameState.Player1Score;
+        p2Score.innerHTML = "P2 Score: " + gameState.Player2Score;
+
+        // Set the right player active
+        IfTrueAddElseRemoveClass(p1Score, "Active", activePlayer == 0);
+        IfTrueAddElseRemoveClass(p2Score, "Active", activePlayer == 1);
     }
 
     function IfTrueAddElseRemoveClass(element, className, condition){

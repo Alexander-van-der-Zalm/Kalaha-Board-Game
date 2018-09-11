@@ -61,6 +61,11 @@ public class PitCollection<T extends IPit> implements IPitCollection<T> {
     }
 
     @Override
+    public Integer IndexOf(T pit) {
+        return pList.indexOf(pit);
+    }
+
+    @Override
     public T Get(int index) {
         return pList.get(index);
     }
