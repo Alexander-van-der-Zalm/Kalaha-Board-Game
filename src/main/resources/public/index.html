@@ -11,15 +11,16 @@
     vertical-align: middle;
     margin: auto;
 }
+.GameContainer {
+    background-color: #2196F3;
+    padding:20px;
+    font-size: 30px;
+    border-radius: 50px;
+}
 .TopUI{
     display:grid;
     grid-template-columns: 1fr 2fr 1fr;
     margin: 20px;
-}
-.Normal-Pits{
-    display:grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 3px;
 }
 .Board{
     display:grid;
@@ -29,13 +30,6 @@
     padding: 10px;
     border: 20px solid #ffff;
     border-radius: 35px;
-}
-
-.GameContainer {
-    background-color: #2196F3;
-    padding:20px;
-    font-size: 30px;
-    border-radius: 50px;
 }
 .Kalaha-left{
     grid-column-start:1;
@@ -63,11 +57,6 @@
     border: 3px solid #ffff;
     animation: border-pulsate 2s infinite;
 }
-@keyframes border-pulsate {
-    0%   { border-color: rgba(255, 255, 255, 1); }
-    50%  { border-color: rgba(0, 0, 0, 1); }
-    100% { border-color: rgba(255, 255, 255, 1); }
-}
 .Valid:Hover{
     background-color: rgba(255,255,255,0.9);
 }
@@ -80,11 +69,16 @@
     border: 3px solid #ffff;
     border-radius:20px;
 }
-.Flex{
-    display:flex;
-}
 .Rules{
     Font-size: 20px;
+}
+.DropDown{
+    transition: top .5s cubic-bezier(.5,.25,.5,1.5);
+}
+@keyframes border-pulsate {
+    0%   { border-color: rgba(255, 255, 255, 1); }
+    50%  { border-color: rgba(0, 0, 0, 1); }
+    100% { border-color: rgba(255, 255, 255, 1); }
 }
 </style>
 
@@ -98,21 +92,24 @@
             <div class="UI-Element Turn">Turn: 10</div>
             <div class="UI-Element Player2Score Player P2">P2 Score: 0</div>
         </div>
+        <div class="Spawner">
+
+        </div>
         <div class="Board">
-            <div class="Kalaha-left Pit" value="0">0</div>
-            <div class="Pit P1 Valid" value="1">6</div>
-            <div class="Pit P1 Valid" value="2">6</div>
-            <div class="Pit P1 Valid" value="3">6</div>
-            <div class="Pit P1 Valid">6</div>
-            <div class="Pit P1 Valid">6</div>
-            <div class="Pit P1 Valid">6</div>
+            <div class="Kalaha-left Pit">0</div>
+            <div class="Pit P1 Valid">0</div>
+            <div class="Pit P1 Valid">0</div>
+            <div class="Pit P1 Valid">0</div>
+            <div class="Pit P1 Valid">0</div>
+            <div class="Pit P1 Valid">0</div>
+            <div class="Pit P1 Valid">0</div>
             <div class="Kalaha-right Pit">0</div>
-            <div class="Pit P2">6</div>
-            <div class="Pit P2">6</div>
-            <div class="Pit P2">6</div>
-            <div class="Pit P2">6</div>
-            <div class="Pit P2">6</div>
-            <div class="Pit P2">6</div>
+            <div class="Pit P2">0</div>
+            <div class="Pit P2">0</div>
+            <div class="Pit P2">0</div>
+            <div class="Pit P2">0</div>
+            <div class="Pit P2">0</div>
+            <div class="Pit P2">0</div>
         </div>
         <div class="Rules">
             <p>Rules explained here: <br/>
@@ -126,45 +123,73 @@
 <script type="text/javascript" language="JavaScript">
     
     var activePlayer = 0;
-    var errorLog;
+    var pits;
+
     var p1Score = document.getElementsByClassName("Player1Score")[0];
     var p2Score = document.getElementsByClassName("Player2Score")[0];
     var TurnUI = document.getElementsByClassName("Turn")[0];
-
-    var pits;
+    var spawner = document.getElementsByClassName("Spawner")[0];
+    var board =  document.getElementsByClassName("Board")[0];
+    var logger;//TODO
+    
     SetupGame();
     function SetupGame(){
-        GetGame();       
         PreparePitFunctionality();
+        GetGame();       
     }
 
     function PreparePitFunctionality(){
+        // Convert pit dom elements to easily useable array 
         pits = Array.prototype.slice.call(document.getElementsByClassName("Pit"));
+        
         for(var i = 0; i < pits.length; i++){
-            console.log(pits[i])
-            console.log(i);
+            // Add corrected index
             if(i < 8)
                 pits[i].value = i;
             else
                 pits[i].value = 13 - i + 8;
-            pits[i].onclick = function(){
-                if(this.classList.contains("Valid")){
-                    PostGame(this.value, activePlayer);
-                }
-                else{
-                    console.log("Invalid Move");
-                    console.log(this.value);
-                }
-            }
+
+            // Add the onclick functionality
+            pits[i].onclick = OnPitClick;
         }
         
+        // For ease of use sort the array
         pits.sort((a,b) =>{
             return a.value < b.value ? -1 : 1;
         })
-        console.log("Sorted");
-        for(var i = 0; i < pits.length; i++){
-            console.log(pits[i].value)
+    }
+
+    function OnPitClick(){
+        if(this.classList.contains("Valid")){
+            PostGame(this.value, activePlayer);
+            StartDropDownAnimation(this, 1);
         }
+        else{
+            console.log("Invalid Move");
+            console.log(this.value);
+        }
+    }
+
+    function StartDropDownAnimation(el, amount){
+        var spawn = document.createElement('div');
+        spawn.innerHTML = amount;
+        
+        spawn.style.position = "absolute";
+        spawn.style.width = "40px";
+        spawn.style.top = (-100 + el.offsetTop).toString() + "px";
+        spawn.style.left = el.offsetLeft.toString() + "px";
+        spawn.className = "Pit DropDown";
+        setTimeout(() => spawn.style.top = (el.offsetTop).toString() + "px", 10);
+        
+        
+        spawn.addEventListener('transitionend', ()=>spawn.remove());//console.log("AnimationFinished"));
+        console.log(el.offsetLeft + " " + el.offsetTop);
+        spawner.appendChild(spawn);
+        //spawn.className = "bounceInDown";
+    }
+
+    function DropDownAnimation(el, time){
+
     }
 
     function SetGameViewFromJSON(gameState){
