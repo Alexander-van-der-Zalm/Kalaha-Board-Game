@@ -33,7 +33,7 @@ public class SimpleGame implements IGame{
         // Log all the changes
         pits.pList.stream()
                 .filter((p) -> !p.IsKalaha())
-                .forEach((p) -> logger.Log(new PitLog(p,pits.pList.indexOf(p), 6)));
+                .forEach((p) -> logger.Log(new PitLog(p, pits.pList.indexOf(p), 6, p.Amount())));
 
         System.out.println("Initialized a kalaha game.");
         return GameToTurnData();

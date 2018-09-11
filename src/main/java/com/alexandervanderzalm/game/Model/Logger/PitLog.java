@@ -12,11 +12,12 @@ public class PitLog extends LogData implements IPitLog  {
 
     IKalahaPit pit;
 
-    public PitLog(IKalahaPit pit, Integer index, Integer amountAdded) {
+    public PitLog(IKalahaPit pit, int index, int amountAdded, int finalAmount) {
         super(LogTypes.PitLog);
         this.pit = pit;
         super.Index = index;
         super.AmountAdded = amountAdded;
+        super.FinalAmount = finalAmount;
     }
 
     @Override

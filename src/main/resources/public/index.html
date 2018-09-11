@@ -122,6 +122,7 @@
 
 <script type="text/javascript" language="JavaScript">
     
+    var animSpeedInMS = 200;
     var activePlayer = 0;
     var pits;
 
@@ -163,7 +164,7 @@
     function OnPitClick(){
         if(this.classList.contains("Valid")){
             PostGame(this.value, activePlayer);
-            StartDropDownAnimation(this, this.innerHTML, 0, -100);
+            StartDropDownAnimation(this, this.innerHTML, 0, -100, null);
         }
         else{
             console.log("Invalid Move");
@@ -171,7 +172,15 @@
         }
     }
 
-    function StartDropDownAnimation(el, amount, startOffset, goalOffset){
+    function StartDropDownAnimationSimple(el, amount, onAnimationEnd){
+        if(amount > 0){
+            StartDropDownAnimation(el, amount, -100, 0, onAnimationEnd);
+        }else{
+            StartDropDownAnimation(el, amount, 0, -100, onAnimationEnd);
+        }
+    }
+
+    function StartDropDownAnimation(el, amount, startOffset, goalOffset, onAnimationEnd){
         var spawn = document.createElement('div');
         spawn.innerHTML = amount;
         
@@ -181,24 +190,36 @@
         spawn.style.left = el.offsetLeft.toString() + "px";
         spawn.className = "Pit DropDown";
         spawner.appendChild(spawn);
+
         // Remove the spawned object when animation is finished
         setTimeout(() => spawn.style.top = (goalOffset + el.offsetTop).toString() + "px", 10);
         spawn.addEventListener('transitionend', ()=>spawn.remove());//console.log("AnimationFinished"));
+        if(onAnimationEnd != null)
+            spawn.addEventListener('transitionend', onAnimationEnd);
     }
     
     function SetPitValue(Index, Amount){
         pits[Index].innerHTML = Amount;
     }
 
-    function SteGameViewFromJSONDelayed(gameState){
+    function SetGameViewFromJSONViaTransforms(gameState){
         // Do animation per transform with a delay
-
+        console.log(gameState.Log.length);
+        var animDelay = 0;
+        gameState.Log.forEach((e) => {
+            console.log(e);
+            setTimeout(
+                () => StartDropDownAnimationSimple(pits[e.Index],e.AmountAdded,
+                    () => SetPitValue(e.Index,e.FinalAmount)), 
+                animDelay);
+            animDelay += animSpeedInMS;
+        });
         // Finished all set valid
     }
 
     function SetGameViewFromJSON(gameState){
         console.log("SetGameViewFromJSON");
-
+        SetGameViewFromJSONViaTransforms(gameState);
         // Check for a win gameState/whos turn it is
         if(gameState.NextTurnState == "WinP1" || gameState.NextTurnState == "WinP2")
             activePlayer = gameState.NextTurnState == "WinP1" ? -1 : -2;
