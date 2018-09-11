@@ -5,54 +5,54 @@ import java.util.List;
 
 public class PitCollection<T extends IPit> implements IPitCollection<T> {
 
-    public List<T> Pits;
+    public List<T> pList;
 
     public PitCollection() {
-        Pits = new ArrayList<>();
+        pList = new ArrayList<>();
     }
 
     public PitCollection(List<T> pits) {
-        this.Pits = pits;
+        this.pList = pits;
     }
 
     @Override
     public T Right(int index) {
-        return Pits.get(PitUtil.Right(Pits.size(),index));
+        return pList.get(PitUtil.Right(pList.size(),index));
     }
 
     @Override
     public T Right(T pit) {
-        return Right(Pits.indexOf(pit));
+        return Right(pList.indexOf(pit));
     }
 
     @Override
     public T Left(int index) {
-        return Pits.get(PitUtil.Left(Pits.size(),index));
+        return pList.get(PitUtil.Left(pList.size(),index));
     }
 
     @Override
     public T Left(T pit) {
-        return Left(Pits.indexOf(pit));
+        return Left(pList.indexOf(pit));
     }
 
     @Override
     public T Opposite(int index) {
-        return Pits.get(PitUtil.Opposite(Pits.size(),index));
+        return pList.get(PitUtil.Opposite(pList.size(),index));
     }
 
     @Override
     public T Opposite(T pit) {
-        return Opposite(Pits.indexOf(pit));
+        return Opposite(pList.indexOf(pit));
     }
 
     @Override
     public T KalahaOfPlayer1() {
-        return Pits.get(PitUtil.FirstKalaha());
+        return pList.get(PitUtil.FirstKalaha());
     }
 
     @Override
     public T KalahaOfPlayer2() {
-        return Pits.get(PitUtil.SecondKalaha(Pits.size()));
+        return pList.get(PitUtil.SecondKalaha(pList.size()));
     }
 
     @Override
@@ -62,6 +62,6 @@ public class PitCollection<T extends IPit> implements IPitCollection<T> {
 
     @Override
     public T Get(int index) {
-        return Pits.get(index);
+        return pList.get(index);
     }
 }

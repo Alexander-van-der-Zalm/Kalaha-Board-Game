@@ -1,8 +1,6 @@
 package com.alexandervanderzalm.game.Model;
 
-import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SimpleGame implements IGame{
 
@@ -43,7 +41,7 @@ public class SimpleGame implements IGame{
 
             // Skip when landed upon oponents kalaha
             if(current.IsKalaha() && current.GetPlayer() != currentPlayer) {
-                System.out.println(String.format("Skipped dropping a stone opponents Kalaha @ %s", pits.Pits.indexOf(current)));
+                System.out.println(String.format("Skipped dropping a stone opponents Kalaha @ %s", pits.pList.indexOf(current)));
                 continue;
             }
             if(current.GetPlayer() == currentPlayer && hand == 1)
@@ -55,7 +53,7 @@ public class SimpleGame implements IGame{
                     FlipGameState();
                 } // Capture opposite?
                 else if(current.Amount() == 0){
-                    System.out.println(String.format("Capture from %d opposite @ %d ", pits.Pits.indexOf(current), pits.Pits.indexOf(pits.Opposite(current))));
+                    System.out.println(String.format("Capture from %d opposite @ %d ", pits.pList.indexOf(current), pits.pList.indexOf(pits.Opposite(current))));
                     // add both opposite & the last one into own kalaha
                     pits.KalahaOfPlayer(currentPlayer).Add(pits.Opposite(current).GrabAll() + 1);
                     //pits.KalahaOfPlayer(currentPlayer).Add();
@@ -64,25 +62,45 @@ public class SimpleGame implements IGame{
                 }
             }
 
-            System.out.println("Dropped a stone @ " + pits.Pits.indexOf(current));
+            System.out.println("Dropped a stone @ " + pits.pList.indexOf(current));
             // Drop stone
             current.Add(1);
             hand--;
         }
 
         // Check for end of game
-        //Stream<IKalahaPit> filtered = pits.Pits.stream().filter((p) -> !p.IsKalaha() && p.Amount() == 0);
-        if(pits.Pits.stream().filter((p) -> !p.IsKalaha() && p.Amount() == 0 && p.GetPlayer() == 0).count() == 6 || pits.Pits.stream().filter((p) ->!p.IsKalaha() && p.Amount() == 0 && p.GetPlayer() == 1).count() == 6) {
+        // --One of the sides is empty
+        if(pits.pList.stream().filter((p) -> !p.IsKalaha() && p.Amount() == 0 && p.GetPlayer() == 0).count() == 6 || pits.pList.stream().filter((p) ->!p.IsKalaha() && p.Amount() == 0 && p.GetPlayer() == 1).count() == 6) {
             // Add all pits to their respective owners
-            pits.Pits.stream().filter((p) -> !p.IsKalaha()).forEach((p) -> pits.KalahaOfPlayer(p.GetPlayer()).Add(p.GrabAll()));
-
-            if(pits.KalahaOfPlayer1().Amount() > pits.KalahaOfPlayer2().Amount())
-                nextTurnState = GameState.WinP1;
-            else
-                nextTurnState = GameState.WinP2;
+            pits.pList.stream().filter((p) -> !p.IsKalaha()).forEach((p) -> pits.KalahaOfPlayer(p.GetPlayer()).Add(p.GrabAll()));
+            SetWinner();
 
         }
+
+        // --Unwinnable condition detected
+        int pitsInField = pits.pList.stream()
+                .filter((p) -> !p.IsKalaha())
+                .map((p) -> p.Amount())
+                .reduce(0, (x,y) -> x + y);
+
+        if(pits.KalahaOfPlayer1().Amount() + pitsInField < pits.KalahaOfPlayer2().Amount() ||
+           pits.KalahaOfPlayer2().Amount() + pitsInField < pits.KalahaOfPlayer1().Amount()) {
+            System.out.println("Unwinnable condition detected");
+            SetWinner();
+        }
         return GameToTurnData();
+    }
+
+    private void SetWinner(){
+
+        if(pits.KalahaOfPlayer1().Amount() > pits.KalahaOfPlayer2().Amount()) {
+            nextTurnState = GameState.WinP1;
+            currentPlayer = 0;
+        }else {
+            nextTurnState = GameState.WinP2;
+            currentPlayer = 1;
+        }
+        System.out.println("We have a winner: " + (currentPlayer == 0 ? "Player1" : "Player2"));
     }
 
     private void FlipGameState(){
@@ -91,8 +109,9 @@ public class SimpleGame implements IGame{
 
     private TurnData GameToTurnData(){
         TurnData data = new TurnData();
+        // Transform pit data into clean rest data
         // data.Pits = pits.stream().map(x -> new KalahaPitData(x.GetPlayer(),x.IsKalaha(),x.Amount())).collect(Collectors.toList());
-        data.Pits = pits.Pits.stream().map(x -> x.Data()).collect(Collectors.toList());
+        data.Pits = pits.pList.stream().map(x -> x.Data()).collect(Collectors.toList());
         data.NextTurnState = nextTurnState;
         data.Player1Score = pits.KalahaOfPlayer1().Amount();//pits.Get(0).Amount();
         data.Player2Score = pits.KalahaOfPlayer2().Amount();// pits.Get(pits.Pits.size()/2).Amount();
