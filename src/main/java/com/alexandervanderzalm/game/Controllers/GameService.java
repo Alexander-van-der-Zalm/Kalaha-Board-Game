@@ -1,12 +1,9 @@
-package com.alexandervanderzalm.game.controllers;
+package com.alexandervanderzalm.game.Controllers;
 
 import com.alexandervanderzalm.game.Model.*;
-import com.alexandervanderzalm.game.Model.Pits.KalahaPitData;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Model.Turn.TurnInputData;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 
 @Service
 public class GameService {
@@ -15,30 +12,20 @@ public class GameService {
     // Change this to a gameRepo
     private IGame game;
 
+    // TODO serve multiple game instances(requires hash?)
     public TurnData InitGame() {
-
-        //if(game == null){
-            game = new SimpleGame();
-        //}
+        game = new SimpleGame();
 
         return game.InitializeGame();
     }
 
+    // TODO serve multiple game instances(requires hash?)
     public TurnData DoTurn(TurnInputData input) {
+
         // Validate valid input
+        // TODO validate input
 
         // If so do the actual turn
         return game.DoTurn(input.SelectedBucket);
     }
-
-    private TurnData CreateFauxData(){
-        TurnData turn = new TurnData();
-        turn.NextTurnState = GameState.TurnP1;
-        turn.Pits = new ArrayList<>();
-        turn.Pits.add(new KalahaPitData());
-        turn.Pits.add(new KalahaPitData());
-        turn.Pits.add(new KalahaPitData());
-        return turn;
-    }
-
 }

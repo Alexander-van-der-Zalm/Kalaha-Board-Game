@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.game.controllers;
+package com.alexandervanderzalm.game.Controllers;
 
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Model.Turn.TurnInputData;
