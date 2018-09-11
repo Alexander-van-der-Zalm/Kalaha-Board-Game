@@ -1,5 +1,7 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Model.Logger.LogCollection;
+import com.alexandervanderzalm.game.Model.Logger.PitLog;
 import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
 import com.alexandervanderzalm.game.Model.Pits.PitCollection;
 import com.alexandervanderzalm.game.Model.Pits.PitUtil;
@@ -14,6 +16,7 @@ public class SimpleGame implements IGame{
     private GameState nextTurnState;
     private int currentPlayer = 0;
     private int currentTurn = 0;
+    private LogCollection logger = new LogCollection();
 
     public SimpleGame() {
         //this.pits = new ArrayList<>();
@@ -21,10 +24,17 @@ public class SimpleGame implements IGame{
 
     @Override
     public TurnData InitializeGame() {
-
+        int fieldsPerPlayer = 6;
+        int startStones = 6;
         pits = new PitCollection<>( PitUtil.CreatePits(14,6));
         currentTurn = 0;
         nextTurnState = GameState.TurnP1;
+
+        // Log all the changes
+        pits.pList.stream()
+                .filter((p) -> !p.IsKalaha())
+                .forEach((p) -> logger.Log(new PitLog(p,pits.pList.indexOf(p), 6)));
+
         System.out.println("Initialized a kalaha game.");
         return GameToTurnData();
     }
@@ -124,6 +134,8 @@ public class SimpleGame implements IGame{
         data.Turn = currentTurn;
         data.Player1Score = pits.KalahaOfPlayer1().Amount();//pits.Get(0).Amount();
         data.Player2Score = pits.KalahaOfPlayer2().Amount();// pits.Get(pits.Pits.size()/2).Amount();
+        data.Log = logger.GetLogData();
+        logger.ClearLogs();
         return data;
     }
 

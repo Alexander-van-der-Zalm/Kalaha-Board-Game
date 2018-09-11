@@ -6,13 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PitUtil {
+
     public static List<IKalahaPit> CreatePits(int boardSize, int stonesAmount){
+        return CreatePits(boardSize,stonesAmount,null);
+    }
+
+    public static List<IKalahaPit> CreatePits(int boardSize, int stonesAmount, ProcedureCollection onChanged){
         List<IKalahaPit> pits = new ArrayList<>();
 
         int secondKalaha = boardSize / 2;
 
         for (int i = 0; i < boardSize; i++) {
-            pits.add(new KalahaPit(new ProcedureCollection()));
+            if(onChanged == null)
+                pits.add(new KalahaPit(new ProcedureCollection()));
+            else
+                pits.add(new KalahaPit(onChanged));
+
             if(i == 0 || i == secondKalaha)
                 pits.get(i).MakeKalaha();
             else

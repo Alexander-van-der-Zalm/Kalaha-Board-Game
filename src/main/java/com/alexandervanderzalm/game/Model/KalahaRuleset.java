@@ -1,12 +1,10 @@
 package com.alexandervanderzalm.game.Model;
 
-import com.alexandervanderzalm.game.Model.Logger.ITransformCollection;
 import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
 import com.alexandervanderzalm.game.Model.Pits.IPitCollection;
 import com.alexandervanderzalm.game.Model.Pits.KalahaPit;
 import com.alexandervanderzalm.game.Model.Turn.ITurn;
 import com.alexandervanderzalm.game.Model.Turn.TurnUtil;
-import com.alexandervanderzalm.game.Utility.IMethodScheduler;
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 

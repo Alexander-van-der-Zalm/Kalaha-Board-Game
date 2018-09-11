@@ -135,7 +135,8 @@
     SetupGame();
     function SetupGame(){
         PreparePitFunctionality();
-        GetGame();       
+        GetGame();    
+         
     }
 
     function PreparePitFunctionality(){
@@ -180,11 +181,20 @@
         spawn.style.left = el.offsetLeft.toString() + "px";
         spawn.className = "Pit DropDown";
         spawner.appendChild(spawn);
-        // Remove when animation is finished
+        // Remove the spawned object when animation is finished
         setTimeout(() => spawn.style.top = (goalOffset + el.offsetTop).toString() + "px", 10);
         spawn.addEventListener('transitionend', ()=>spawn.remove());//console.log("AnimationFinished"));
     }
     
+    function SetPitValue(Index, Amount){
+        pits[Index].innerHTML = Amount;
+    }
+
+    function SteGameViewFromJSONDelayed(gameState){
+        // Do animation per transform with a delay
+
+        // Finished all set valid
+    }
 
     function SetGameViewFromJSON(gameState){
         console.log("SetGameViewFromJSON");
@@ -213,7 +223,7 @@
         // Set the right player active
         IfTrueAddElseRemoveClass(p1Score, "Active", activePlayer == 0);
         IfTrueAddElseRemoveClass(p2Score, "Active", activePlayer == 1);
-        
+
         // Remove this tbh
         if(activePlayer == -1)
             alert("Congratulations Player1!");
