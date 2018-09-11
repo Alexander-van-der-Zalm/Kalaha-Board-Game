@@ -8,6 +8,7 @@ public class SimpleGame implements IGame{
     private PitCollection<IKalahaPit> pits;
     private GameState nextTurnState;
     private int currentPlayer = 0;
+    private int currentTurn = 0;
 
     public SimpleGame() {
         //this.pits = new ArrayList<>();
@@ -17,7 +18,7 @@ public class SimpleGame implements IGame{
     public TurnData InitializeGame() {
 
         pits = new PitCollection<>( PitUtil.CreatePits(14,6));
-
+        currentTurn = 0;
         nextTurnState = GameState.TurnP1;
         System.out.println("Initialized a kalaha game.");
         return GameToTurnData();
@@ -25,7 +26,9 @@ public class SimpleGame implements IGame{
 
     @Override
     public TurnData DoTurn(Integer SelectedIndex) {
+
         // Prepare gameState next round & current player index
+        currentTurn++;
         currentPlayer = nextTurnState == GameState.TurnP1 ? 0 : 1;
         FlipGameState();
 
@@ -113,6 +116,7 @@ public class SimpleGame implements IGame{
         // data.Pits = pits.stream().map(x -> new KalahaPitData(x.GetPlayer(),x.IsKalaha(),x.Amount())).collect(Collectors.toList());
         data.Pits = pits.pList.stream().map(x -> x.Data()).collect(Collectors.toList());
         data.NextTurnState = nextTurnState;
+        data.Turn = currentTurn;
         data.Player1Score = pits.KalahaOfPlayer1().Amount();//pits.Get(0).Amount();
         data.Player2Score = pits.KalahaOfPlayer2().Amount();// pits.Get(pits.Pits.size()/2).Amount();
         return data;

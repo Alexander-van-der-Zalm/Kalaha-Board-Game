@@ -95,7 +95,7 @@
     <div class="GameContainer">
         <div class="TopUI">
             <div class="UI-Element Player1Score Player P1 Active">P1 Score: 0</div>
-            <div class="UI-Element ">Turn: 10</div>
+            <div class="UI-Element Turn">Turn: 10</div>
             <div class="UI-Element Player2Score Player P2">P2 Score: 0</div>
         </div>
         <div class="Board">
@@ -129,6 +129,8 @@
     var errorLog;
     var p1Score = document.getElementsByClassName("Player1Score")[0];
     var p2Score = document.getElementsByClassName("Player2Score")[0];
+    var TurnUI = document.getElementsByClassName("Turn")[0];
+
     var pits;
     SetupGame();
     function SetupGame(){
@@ -167,6 +169,8 @@
 
     function SetGameViewFromJSON(gameState){
         console.log("SetGameViewFromJSON");
+        
+        TurnUI.innerHTML = "Turn: " + gameState.Turn;
 
         // Check for a win gameState/whos turn it is
         if(gameState.NextTurnState == "WinP1" || gameState.NextTurnState == "WinP2"){

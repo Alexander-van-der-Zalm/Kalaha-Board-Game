@@ -7,6 +7,7 @@ public class TurnData {
     // Previous TurnData
     // Next TurnData
 
+    public int Turn;
     public int Player1Score;
     public int Player2Score;
     public GameState NextTurnState;
