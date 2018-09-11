@@ -1,14 +1,8 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Pits;
 
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 
-interface IKalahaPit extends IObservedPit<Integer>{
-    Boolean IsKalaha();
-    void MakeKalaha();
-    Integer GetPlayer();
-    void SetPlayer(Integer player);
-    KalahaPitData Data();
-}
+
 
 public class KalahaPit implements IKalahaPit{
     private KalahaPitData Data;
@@ -47,6 +41,7 @@ public class KalahaPit implements IKalahaPit{
     @Override
     public void Add(Integer stones) {
         Data.stones += stones;
+        OnChanged.Process();
     }
 
     @Override
@@ -58,6 +53,7 @@ public class KalahaPit implements IKalahaPit{
     public Integer GrabAll() {
         Integer grabbed = Data.stones;
         Data.stones = 0;
+        OnChanged.Process();
         return grabbed;
     }
 

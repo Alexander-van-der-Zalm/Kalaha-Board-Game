@@ -1,10 +1,6 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Logger;
 
-import java.util.List;
-
-interface ITransformCollection{
-    List<ITransform> Transforms();
-}
+import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
 
 interface ITransform{
     String GetLog();

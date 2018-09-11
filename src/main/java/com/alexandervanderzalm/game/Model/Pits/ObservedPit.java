@@ -1,5 +1,6 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Pits;
 
+import com.alexandervanderzalm.game.Model.Pits.IPit;
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 
 public class ObservedPit<T> implements IPit<T> {

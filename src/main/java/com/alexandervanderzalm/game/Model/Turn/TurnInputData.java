@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Turn;
 
 public class TurnInputData {
     public int SelectedBucket;

@@ -1,15 +1,14 @@
 package com.alexandervanderzalm.game.Model;
 
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
-import org.junit.jupiter.api.Test;
 import org.springframework.util.Assert;
 
-class ObservedPitTest {
+public class ObservedPitTest {
 
     private Integer ChangeLogger = 0;
 
 /*    @Test
-    void add_AddedEvent_FiredEventOnChange() {
+    public void add_AddedEvent_FiredEventOnChange() {
         // Setup
         ObservedPit p = new ObservedPit(new ProcedureCollection());
         p.OnChanged.Add(() -> ChangeLogger +=1 );
@@ -24,7 +23,7 @@ class ObservedPitTest {
     }
 
     @Test
-    void grabAll_AddedEvent_FiredEventOnChange() {
+    public void grabAll_AddedEvent_FiredEventOnChange() {
         // Setup
         ObservedPit p = new ObservedPit(new ProcedureCollection());
         p.OnChanged.Add(() -> ChangeLogger +=1 );

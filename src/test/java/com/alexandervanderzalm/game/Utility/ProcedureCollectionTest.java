@@ -1,14 +1,14 @@
 package com.alexandervanderzalm.game.Utility;
 
 import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.util.Assert;
 
-class ProcedureCollectionTest {
+public class ProcedureCollectionTest {
 
     Integer counter = 0;
     @Test
-    void removeProcedure_AddAndRemove_NoProcedureDone() {
+    public void removeProcedure_AddAndRemove_NoProcedureDone() {
         Procedure p = () -> counter += 1;
         IProcedureCollection t = new ProcedureCollection();
         counter = 0;

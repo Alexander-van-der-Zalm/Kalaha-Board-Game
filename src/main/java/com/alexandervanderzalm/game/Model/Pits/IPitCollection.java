@@ -1,6 +1,4 @@
-package com.alexandervanderzalm.game.Model;
-
-import java.util.List;
+package com.alexandervanderzalm.game.Model.Pits;
 
 public interface IPitCollection<T extends IPit> {
 

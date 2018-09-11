@@ -1,4 +1,6 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Turn;
+
+import com.alexandervanderzalm.game.Model.GameState;
 
 public class TurnUtil{
 

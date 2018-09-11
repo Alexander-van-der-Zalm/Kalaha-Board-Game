@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Pits;
 
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 

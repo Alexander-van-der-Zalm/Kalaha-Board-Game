@@ -2,14 +2,14 @@ package com.alexandervanderzalm.game.Utility;
 
 import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Method;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.util.Assert;
 
-class MethodCollectionTest {
+public class MethodCollectionTest {
 
     Integer counter = 0;
     @Test
-    void removeMethod_AddAndRemove_NoMethodDone() {
+    public void removeMethod_AddAndRemove_NoMethodDone() {
         // Setup
         Method<Integer> m = (a) -> counter += a;
         IMethodCollection<Integer> c = new MethodCollection<>();
@@ -23,7 +23,7 @@ class MethodCollectionTest {
     }
 
     @Test
-    void addethod_AddAndProcess_Processed() {
+    public void addethod_AddAndProcess_Processed() {
         // Setup
         Method<Integer> m = (a) -> counter += a;
         IMethodCollection<Integer> c = new MethodCollection<>();

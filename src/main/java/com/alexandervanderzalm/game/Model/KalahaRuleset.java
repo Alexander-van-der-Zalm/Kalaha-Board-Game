@@ -1,5 +1,11 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Model.Logger.ITransformCollection;
+import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
+import com.alexandervanderzalm.game.Model.Pits.IPitCollection;
+import com.alexandervanderzalm.game.Model.Pits.KalahaPit;
+import com.alexandervanderzalm.game.Model.Turn.ITurn;
+import com.alexandervanderzalm.game.Model.Turn.TurnUtil;
 import com.alexandervanderzalm.game.Utility.IMethodScheduler;
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
@@ -24,20 +30,7 @@ interface IKalahaActions{
     IProcedureCollection EndGame();
 }
 
-interface ITurn{
-    // Functionality
-    IMethodScheduler<ITurn> EndOfTurn();
 
-
-    // Actual Data Object
-    //TurnData Data();
-
-    // Shortcuts -- Maybe move to Data?
-    //IKalahaActions Actions();
-    ITransformCollection Transforms();
-    Integer Player();
-    IPitCollection<IKalahaPit> pits(); // Should this be in IKalahaTurn? -> maybe move to data?
-}
 
 public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
 
@@ -116,7 +109,7 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
     private void Capture(IKalahaPit normalPit, ITurn turn){//IPitCollection pits) {
         turn.pits().Opposite(normalPit);
         // TODO capture logic
-        turn.Transforms().Transforms().add(new NormalTransform("Capture"));
+        //turn.Transforms().Transforms().add(new NormalTransform("Capture"));
     }
 
     private boolean OwnEmpty(IKalahaPit normalPit, int player) {
@@ -131,7 +124,7 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
 
     private void ExtraTurn(ITurn turn){
         // TODO extra turn logic
-        turn.Transforms().Transforms().add(new NormalTransform("Extra turn"));
+        //turn.Transforms().Transforms().add(new NormalTransform("Extra turn"));
     }
 
     // TODO

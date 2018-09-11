@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Pits;
 
 import java.util.ArrayList;
 import java.util.List;

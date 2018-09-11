@@ -1,7 +1,7 @@
 package com.alexandervanderzalm.game.controllers;
 
-import com.alexandervanderzalm.game.Model.TurnData;
-import com.alexandervanderzalm.game.Model.TurnInputData;
+import com.alexandervanderzalm.game.Model.Turn.TurnData;
+import com.alexandervanderzalm.game.Model.Turn.TurnInputData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

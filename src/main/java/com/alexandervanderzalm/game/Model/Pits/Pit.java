@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Pits;
 
 public class Pit implements IPit<Integer> {
     private Integer stones = 0;
