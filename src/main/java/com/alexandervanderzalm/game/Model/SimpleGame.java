@@ -37,7 +37,7 @@ public class SimpleGame implements IGame{
                 .forEach((p) -> Log(p, 6));
 
         Log("Initialized a new kalaha game.");
-        Log(String.format("Turn %s",LogPlayer(currentPlayer)));
+        Log(String.format("Turn %d - %s new Turn",currentTurn + 1, LogPlayer(currentPlayer)));
         return GameToTurnData();
     }
 
@@ -54,7 +54,7 @@ public class SimpleGame implements IGame{
         Integer hand = current.GrabAll();
 
         // Log pickup
-        Log(String.format("%s grabbed %d stones at %d.",LogPlayer(currentPlayer),hand,SelectedIndex));
+        Log(String.format("Turn %d - %s grabbed %d stones at %d.",currentTurn, LogPlayer(currentPlayer),hand,SelectedIndex));
         Log(current, -hand);
 
         // Drop one in the right pit except for the opposite players pit
@@ -64,14 +64,14 @@ public class SimpleGame implements IGame{
 
             // Skip when landed upon oponents kalaha
             if (current.IsKalaha() && current.GetPlayer() != currentPlayer) {
-                Log(String.format("Skipped dropping a stone at opponents Kalaha."));
+                Log(String.format("Turn %d - Skipped dropping a stone at opponents Kalaha.",currentTurn));
                 continue;
             }
             if (current.GetPlayer() == currentPlayer && hand == 1) {
                 // Extra turn
                 if (current.IsKalaha()) {
                     //Extra turn on last stone in hand drop
-                    Log(String.format("%s gains an Extra Turn for dropping the last stone in his own Kalaha.", LogPlayer(currentPlayer)));
+                    Log(String.format("Turn %d - %s gains an Extra Turn for dropping the last stone in his own Kalaha.",currentTurn, LogPlayer(currentPlayer)));
                     FlipGameState();
                 } // Capture opposite?
                 else if (current.Amount() == 0) {
@@ -85,7 +85,7 @@ public class SimpleGame implements IGame{
                     hand--;
 
                     // Log the same events in order
-                    Log(String.format("%s captured %d stones from pit %d and scored %d.", LogPlayer(currentPlayer), stonesCaptured, pits.IndexOf(opposite), stonesCaptured+1));
+                    Log(String.format("Turn %d - %s captured %d stones from pit %d and scored %d.",currentTurn, LogPlayer(currentPlayer), stonesCaptured, pits.IndexOf(opposite), stonesCaptured+1));
                     Log(current, -1);
                     if (stonesCaptured > 0) Log(opposite, -stonesCaptured);
                     Log(kalaha, 1);
@@ -119,13 +119,13 @@ public class SimpleGame implements IGame{
         int p1 = pits.KalahaOfPlayer1().Amount();
         int p2 = pits.KalahaOfPlayer2().Amount();
         if(p1 + pitsInField < p2 || p2 + pitsInField < p1) {
-            Log(String.format("Unwinnable condition detected. %s: %d Field: %d %s: %d.",LogPlayer(0),p1,LogPlayer(1),pitsInField,p2));
+            Log(String.format("Turn %d - Unwinnable condition detected. %s: %d Field: %d %s: %d.",currentTurn ,LogPlayer(0),p1,LogPlayer(1),pitsInField,p2));
             SetWinner();
         }
 
         // Log new turn
         if(nextTurnState == GameState.TurnP1 || nextTurnState == GameState.TurnP2)
-            Log(String.format("Turn %s",LogPlayer(nextTurnState == GameState.TurnP1? 0 : 1)));
+            Log(String.format("Turn %d - %s  new Turn",currentTurn +1, LogPlayer(nextTurnState == GameState.TurnP1? 0 : 1)));
 
         return GameToTurnData();
     }

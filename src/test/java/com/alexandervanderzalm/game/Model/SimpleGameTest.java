@@ -16,4 +16,14 @@ public class SimpleGameTest {
 
         Assert.isTrue(d.Pits.size() == 14, "Check for the pit size");
     }
+
+    @Test
+    public void DoTurn_InitializedGame_TurnProcessed(){
+        SimpleGame g = new SimpleGame();
+        TurnData d = g.InitializeGame();
+
+        TurnData d2 = g.DoTurn(1);
+
+        Assert.isTrue(d.Pits.get(1).stones == 0, "Check if the selected pit is empty");
+    }
 }
