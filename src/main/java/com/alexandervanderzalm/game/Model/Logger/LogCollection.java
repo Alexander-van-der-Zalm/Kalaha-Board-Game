@@ -1,5 +1,7 @@
 package com.alexandervanderzalm.game.Model.Logger;
 
+import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;

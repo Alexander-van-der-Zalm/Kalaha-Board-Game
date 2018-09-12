@@ -2,6 +2,7 @@ package com.alexandervanderzalm.game.Model;
 
 import com.alexandervanderzalm.game.Model.Logger.LogCollection;
 import com.alexandervanderzalm.game.Model.Logger.PitLog;
+import com.alexandervanderzalm.game.Model.Logger.TextLog;
 import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
 import com.alexandervanderzalm.game.Model.Pits.PitCollection;
 import com.alexandervanderzalm.game.Model.Pits.PitUtil;
@@ -51,45 +52,52 @@ public class SimpleGame implements IGame{
         System.out.println("Grabbed pits @ " + SelectedIndex);
         IKalahaPit current = pits.Get(SelectedIndex);
         Integer hand = current.GrabAll();
-        logger.Log(new PitLog(current, pits.IndexOf(current), -hand, current.Amount()));
+
+        // Log pickup
+        Log(current, -hand);
 
         // Drop one in the right pit except for the opposite players pit
         while(hand > 0) {
-        //for (int i = 0; i < hand; i++) {
+            //for (int i = 0; i < hand; i++) {
             current = pits.Right(current);
 
             // Skip when landed upon oponents kalaha
-            if(current.IsKalaha() && current.GetPlayer() != currentPlayer) {
+            if (current.IsKalaha() && current.GetPlayer() != currentPlayer) {
                 System.out.println(String.format("Skipped dropping a stone opponents Kalaha @ %s", pits.pList.indexOf(current)));
                 continue;
             }
-            if(current.GetPlayer() == currentPlayer && hand == 1)
-            {
+            if (current.GetPlayer() == currentPlayer && hand == 1) {
                 // Extra turn
-                if(current.IsKalaha()){
+                if (current.IsKalaha()) {
                     //Extra turn on last stone in hand drop
                     System.out.println(String.format("Extra turn for %s", (currentPlayer == 0 ? "P1" : "P2")));
                     FlipGameState();
                 } // Capture opposite?
-                else if(current.Amount() == 0){
+                else if (current.Amount() == 0) {
                     System.out.println(String.format("Capture from %d opposite @ %d ", pits.pList.indexOf(current), pits.pList.indexOf(pits.Opposite(current))));
+
                     // add both opposite & the last one into own kalaha
                     IKalahaPit opposite = pits.Opposite(current);
-                    int stonesCaptured = opposite.GrabAll();
-                    pits.KalahaOfPlayer(currentPlayer).Add(stonesCaptured + 1);
-                    logger.Log(new PitLog(opposite, pits.IndexOf(opposite), -stonesCaptured, opposite.Amount()));
-                    logger.Log(new PitLog(current, pits.IndexOf(current), stonesCaptured, current.Amount() - 1));
-                    logger.Log(new PitLog(current, pits.IndexOf(current), 1, current.Amount()));
+                    int stonesCaptured = opposite.GrabAll(); // Grab first
+                    IKalahaPit kalaha = pits.KalahaOfPlayer(currentPlayer);
+                    kalaha.Add(stonesCaptured + 1); // Add both the hand and the captured stones to the kalaha
                     hand--;
+
+                    // Log the same events in order
+                    Log(current, -1);
+                    if (stonesCaptured > 0) Log(opposite, -stonesCaptured);
+                    Log(kalaha, 1);
+                    if (stonesCaptured > 0) Log(kalaha, stonesCaptured);
+
                     continue;
                 }
             }
 
             System.out.println("Dropped a stone @ " + pits.pList.indexOf(current));
-            // Drop stone
+            // Drop stone & log
             current.Add(1);
             hand--;
-            logger.Log(new PitLog(current, pits.IndexOf(current), 1, current.Amount()));
+            Log(current, 1);
         }
 
         // Check for end of game
@@ -98,7 +106,6 @@ public class SimpleGame implements IGame{
             // Add all pits to their respective owners
             pits.pList.stream().filter((p) -> !p.IsKalaha()).forEach((p) -> pits.KalahaOfPlayer(p.GetPlayer()).Add(p.GrabAll()));
             SetWinner();
-
         }
 
         // --Unwinnable condition detected
@@ -113,6 +120,14 @@ public class SimpleGame implements IGame{
             SetWinner();
         }
         return GameToTurnData();
+    }
+
+    private void Log(IKalahaPit pit, int amount){
+        logger.Log(new PitLog(pit, pits.IndexOf(pit), amount, pit.Amount()));
+    }
+
+    private void Log(String textLog){
+        logger.Log(new TextLog(textLog));
     }
 
     private void SetWinner(){
@@ -144,5 +159,4 @@ public class SimpleGame implements IGame{
         logger.ClearLogs();
         return data;
     }
-
 }
