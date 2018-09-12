@@ -5,14 +5,20 @@
     <title>Kalaha Board Game</title>
 </head>
 <style>
+h3{
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size:22px;
+}
 .Content{
     text-align: center;
     max-width: 800px;
     vertical-align: middle;
     margin: auto;
+    background-color:#edf6e9;
 }
 .GameContainer {
-    background-color: #2196F3;
+    background-color: #66cdaa;
     padding:20px;
     font-size: 30px;
     border-radius: 50px;
@@ -30,6 +36,17 @@
     padding: 10px;
     border: 20px solid #ffff;
     border-radius: 35px;
+}
+.Log{
+    background-color:black;
+    color: white;
+    font-size: 17px;
+    text-align: left;
+    border-radius: 35px;
+    padding: 15px 25px 15px 25px;
+    margin-top: 20px;
+    height: 120px;
+    overflow: auto;
 }
 .Kalaha-left{
     grid-column-start:1;
@@ -69,8 +86,18 @@
     border: 3px solid #ffff;
     border-radius:20px;
 }
+.Player1Log{
+    color: #bc3e1a;
+    font-weight: bold;
+}
+.Player2Log{
+    color: #c6e2ff;
+    font-weight: bold;
+}
 .Rules{
     Font-size: 20px;
+    margin-bottom: 20px;
+    text-align: justify;
 }
 .DropDown{
     transition: top .5s ease-in;/*cubic-bezier(.5,.25,.5,1.5);*/
@@ -111,12 +138,33 @@
             <div class="Pit P2">0</div>
             <div class="Pit P2">0</div>
         </div>
-        <div class="Rules">
-            <p>Rules explained here: <br/>
-                Blabla<br/>
-                BlablaS<br/>
-            </p>
+        <div class="Log">
         </div>
+    </div>
+    <div class="Rules">
+        <h2>Rules of Kalaha</h2>
+        <h3>Goal of the game</h3>
+        The goal of the game is to put as many stones in your largest pit also known as the Kalaha. 
+        <h3>Your kalaha</h3>
+        Is the big pit to the left (Player1) or to the right (Player2).<br/>
+        <h3>Your pits</h3>
+        The pits of Player1 are the smaller pits on the top row and the pits of Player2 are in the bottom row.
+        <h3>Making a move</h3>
+        By selecting one of your pits (highlighted) all the stones from that pit will be picked up and dropped one by one in a counterclockwise fashion, skipping the opponents Kalaha.<br/>
+        <h3>Scoring</h3>
+        You score a point for every stone in your own kalaha.<br/>
+        <h3>Extra turn</h3>
+        Whenever you drop the last stone in your own kalaha you get an extra turn.<br/>
+        <h3>Capturing opposite stones</h3>
+        Whenever your last stone drops in your own empty pit, you capture the stones of your opponents opposite pit and put them and the last stone in your own kalaha.<br/>
+        <h3>Game ends</h3>
+        Whenever all the pits of one player are empty. Note that the other player will score all the stones left in their pits.
+    </div>
+    <div class="Production">
+        
+    </div>
+    <div class="Footer">
+        Made by <a href="www.alexandervanderzalm.com">Alexander van der Zalm</a>. 
     </div>
 </body>
 
@@ -131,7 +179,7 @@
     var TurnUI = document.getElementsByClassName("Turn")[0];
     var spawner = document.getElementsByClassName("Spawner")[0];
     var board =  document.getElementsByClassName("Board")[0];
-    var logger;//TODO
+    var log =  document.getElementsByClassName("Log")[0];
     
     SetupGame();
     function SetupGame(){
@@ -210,10 +258,26 @@
         var animDelay = 0;
         gameState.Log.forEach((e) => {
             console.log(e);
-            setTimeout(
-                () => StartDropDownAnimationSimple(pits[e.Index],e.AmountAdded,
-                    () => SetPitValue(e.Index,e.FinalAmount)), 
-                animDelay);
+            
+            switch(e.Type){
+                case "PitLog":
+                setTimeout(
+                    () => StartDropDownAnimationSimple(
+                        pits[e.Index],e.AmountAdded,
+                        () => SetPitValue(e.Index,e.FinalAmount)
+                    ), animDelay
+                );
+                break;
+                case "TextLog":
+                setTimeout(
+                    () => log.insertAdjacentHTML('afterbegin',e.Log + "<br\>")//.innerHTML = e.Log + "<br\>"+ log.innerHTML
+                );
+                break;
+                default:
+                console.log("Text Log type not found");
+                break;
+            }
+            
             animDelay += animSpeedInMS;
         });
         // Finished all set valid

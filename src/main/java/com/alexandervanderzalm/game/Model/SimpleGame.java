@@ -25,8 +25,8 @@ public class SimpleGame implements IGame{
 
     @Override
     public TurnData InitializeGame() {
-        int fieldsPerPlayer = 6;
-        int startStones = 6;
+        //int fieldsPerPlayer = 6;
+        //int startStones = 6;
         pits = new PitCollection<>( PitUtil.CreatePits(14,6));
         currentTurn = 0;
         nextTurnState = GameState.TurnP1;
@@ -34,9 +34,10 @@ public class SimpleGame implements IGame{
         // Log all the changes
         pits.pList.stream()
                 .filter((p) -> !p.IsKalaha())
-                .forEach((p) -> logger.Log(new PitLog(p, pits.pList.indexOf(p), 6, p.Amount())));
+                .forEach((p) -> Log(p, 6));
 
-        System.out.println("Initialized a kalaha game.");
+        Log("Initialized a new kalaha game.");
+        Log(String.format("Turn %s",LogPlayer(currentPlayer)));
         return GameToTurnData();
     }
 
@@ -49,11 +50,11 @@ public class SimpleGame implements IGame{
         FlipGameState();
 
         // Grab all from the currently selected pit
-        System.out.println("Grabbed pits @ " + SelectedIndex);
         IKalahaPit current = pits.Get(SelectedIndex);
         Integer hand = current.GrabAll();
 
         // Log pickup
+        Log(String.format("%s grabbed %d stones at %d.",LogPlayer(currentPlayer),hand,SelectedIndex));
         Log(current, -hand);
 
         // Drop one in the right pit except for the opposite players pit
@@ -63,18 +64,18 @@ public class SimpleGame implements IGame{
 
             // Skip when landed upon oponents kalaha
             if (current.IsKalaha() && current.GetPlayer() != currentPlayer) {
-                System.out.println(String.format("Skipped dropping a stone opponents Kalaha @ %s", pits.pList.indexOf(current)));
+                Log(String.format("Skipped dropping a stone at opponents Kalaha."));
                 continue;
             }
             if (current.GetPlayer() == currentPlayer && hand == 1) {
                 // Extra turn
                 if (current.IsKalaha()) {
                     //Extra turn on last stone in hand drop
-                    System.out.println(String.format("Extra turn for %s", (currentPlayer == 0 ? "P1" : "P2")));
+                    Log(String.format("%s gains an Extra Turn for dropping the last stone in his own Kalaha.", LogPlayer(currentPlayer)));
                     FlipGameState();
                 } // Capture opposite?
                 else if (current.Amount() == 0) {
-                    System.out.println(String.format("Capture from %d opposite @ %d ", pits.pList.indexOf(current), pits.pList.indexOf(pits.Opposite(current))));
+
 
                     // add both opposite & the last one into own kalaha
                     IKalahaPit opposite = pits.Opposite(current);
@@ -84,6 +85,7 @@ public class SimpleGame implements IGame{
                     hand--;
 
                     // Log the same events in order
+                    Log(String.format("%s captured %d stones from pit %d and scored %d.", LogPlayer(currentPlayer), stonesCaptured, pits.IndexOf(opposite), stonesCaptured+1));
                     Log(current, -1);
                     if (stonesCaptured > 0) Log(opposite, -stonesCaptured);
                     Log(kalaha, 1);
@@ -93,7 +95,7 @@ public class SimpleGame implements IGame{
                 }
             }
 
-            System.out.println("Dropped a stone @ " + pits.pList.indexOf(current));
+            //Log(String.format("%s Dropped one stone at pit %d",LogPlayer(currentPlayer), pits.IndexOf(current)));
             // Drop stone & log
             current.Add(1);
             hand--;
@@ -114,11 +116,17 @@ public class SimpleGame implements IGame{
                 .map((p) -> p.Amount())
                 .reduce(0, (x,y) -> x + y);
 
-        if(pits.KalahaOfPlayer1().Amount() + pitsInField < pits.KalahaOfPlayer2().Amount() ||
-           pits.KalahaOfPlayer2().Amount() + pitsInField < pits.KalahaOfPlayer1().Amount()) {
-            System.out.println("Unwinnable condition detected");
+        int p1 = pits.KalahaOfPlayer1().Amount();
+        int p2 = pits.KalahaOfPlayer2().Amount();
+        if(p1 + pitsInField < p2 || p2 + pitsInField < p1) {
+            Log(String.format("Unwinnable condition detected. %s: %d Field: %d %s: %d.",LogPlayer(0),p1,LogPlayer(1),pitsInField,p2));
             SetWinner();
         }
+
+        // Log new turn
+        if(nextTurnState == GameState.TurnP1 || nextTurnState == GameState.TurnP2)
+            Log(String.format("Turn %s",LogPlayer(nextTurnState == GameState.TurnP1? 0 : 1)));
+
         return GameToTurnData();
     }
 
@@ -128,6 +136,11 @@ public class SimpleGame implements IGame{
 
     private void Log(String textLog){
         logger.Log(new TextLog(textLog));
+        System.out.println(textLog);
+    }
+
+    private String LogPlayer(int playerIndex){
+        return  playerIndex == 0 ? "<span class = 'Player1Log'>Player1</span>" : "<span class = 'Player2Log'>Player2</span>";
     }
 
     private void SetWinner(){
@@ -139,7 +152,7 @@ public class SimpleGame implements IGame{
             nextTurnState = GameState.WinP2;
             currentPlayer = 1;
         }
-        System.out.println("We have a winner: " + (currentPlayer == 0 ? "Player1" : "Player2"));
+        Log(String.format("Congratulations %s!", LogPlayer(currentPlayer)));
     }
 
     private void FlipGameState(){
