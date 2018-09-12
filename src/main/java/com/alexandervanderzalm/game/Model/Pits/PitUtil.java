@@ -7,6 +7,8 @@ import java.util.List;
 
 public class PitUtil {
 
+
+
     public static List<IKalahaPit> CreatePits(int boardSize, int stonesAmount){
         return CreatePits(boardSize,stonesAmount,null);
     }

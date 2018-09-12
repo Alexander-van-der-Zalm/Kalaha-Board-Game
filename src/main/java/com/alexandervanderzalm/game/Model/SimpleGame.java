@@ -24,7 +24,7 @@ public class SimpleGame implements IGame{
     }
 
     @Override
-    public TurnData InitializeGame() {
+    public TurnData SetupNewGame() {
         //int fieldsPerPlayer = 6;
         //int startStones = 6;
         pits = new PitCollection<>( PitUtil.CreatePits(14,6));

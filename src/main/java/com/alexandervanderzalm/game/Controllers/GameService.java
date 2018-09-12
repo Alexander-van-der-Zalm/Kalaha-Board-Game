@@ -16,7 +16,7 @@ public class GameService {
     public TurnData InitGame() {
         game = new SimpleGame();
 
-        return game.InitializeGame();
+        return game.SetupNewGame();
     }
 
     // TODO serve multiple game instances(requires hash?)

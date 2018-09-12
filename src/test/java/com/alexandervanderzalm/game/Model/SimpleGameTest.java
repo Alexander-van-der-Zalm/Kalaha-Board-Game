@@ -9,8 +9,8 @@ public class SimpleGameTest {
 
     @Test
     public void initializeGame() {
-        SimpleGame g = new SimpleGame();
-        TurnData d = g.InitializeGame();
+        IGame g = new SimpleGame();
+        TurnData d = g.SetupNewGame();
 
         System.out.println(d.Pits);
 
@@ -19,11 +19,20 @@ public class SimpleGameTest {
 
     @Test
     public void DoTurn_InitializedGame_TurnProcessed(){
-        SimpleGame g = new SimpleGame();
-        TurnData d = g.InitializeGame();
+        IGame g = new SimpleGame();
+        TurnData d = g.SetupNewGame();
 
         TurnData d2 = g.DoTurn(1);
 
         Assert.isTrue(d.Pits.get(1).stones == 0, "Check if the selected pit is empty");
+    }
+
+    @Test
+    public void DoTurn_EndGame_GameFinished(){
+        IGame g = new SimpleGame();
+        int[] mockState = new int[]{10, 0,0,0,0,0,0, 10,
+                                        0,0,0,0,0,0     };
+
+        // TODO implement from mock state
     }
 }
