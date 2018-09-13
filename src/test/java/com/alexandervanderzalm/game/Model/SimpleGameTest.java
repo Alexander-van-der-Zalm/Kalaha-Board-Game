@@ -96,7 +96,7 @@ public class SimpleGameTest {
         // Do the turn
         TurnData t1 = g.DoTurn(1);
 
-        // Player 2 has won with a score of 30
+        // Win detected
         assertEquals(t0.NextTurnState, GameState.TurnP1);
         assertEquals(t1.NextTurnState, GameState.WinP1);
     }
@@ -113,7 +113,7 @@ public class SimpleGameTest {
         // Do the turn
         TurnData t1 = g.DoTurn(1);
 
-        // Player 2 has won with a score of 30
+        // No extra points for player 2
         assertEquals(t0.Player2Score, 0);
         assertEquals(t1.Player2Score, 0);
     }
@@ -130,12 +130,68 @@ public class SimpleGameTest {
         // Do the turn
         TurnData t1 = g.DoTurn(2);
 
-        // Player 2 has won with a score of 30
+        // Should be 20 + 1 afer turn
         assertEquals(t0.Player1Score, 0);
         assertEquals(t1.Player1Score, 21);
     }
 
-    // TODO faulty input
+    // Faulty input
+    @Test public void DoTurn_FaultyInputInputEmptyIndex_NoTurnProcessed(){
+        // Setup
+        IGame g = new SimpleGame();
+        // -->                             first row     second row (clockwise ie inverted order)
+        int[] mockNormalFields = new int[]{0,1,0,0,1,0,  9,11,0,1,0,20};
+        TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
+        TurnData t0 = g.SetUpGameFromTurnData(t0Setup);
+
+        // Do the turn
+        TurnData t1 = g.DoTurn(1);
+
+        // No turn progression because faulty input
+        assertEquals(t0.Turn, 0);
+        assertEquals(t1.Turn, 0);
+    }
+
+    // Faulty input
+    @Test public void DoTurn_FaultyInputInputTwiceSameIndex_OneTurnProcessed(){
+        // Setup
+        IGame g = new SimpleGame();
+        // -->                             first row     second row (clockwise ie inverted order)
+        int[] mockNormalFields = new int[]{1,1,0,0,1,0,  9,11,0,1,0,20};
+        TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
+        TurnData t0 = g.SetUpGameFromTurnData(t0Setup);
+
+        // Do the turn
+        TurnData t1 = g.DoTurn(2);
+        TurnData t2 = g.DoTurn(2);
+
+        // No second turn progression because faulty input
+        assertEquals(t0.Turn, 0);
+        assertEquals(t1.Turn, 1);
+        assertEquals(t2.Turn, 1);
+    }
+
+    // Faulty input
+    @Test public void DoTurn_FaultyInputWrongIndexForActivePlayer_NoTurnProcessed(){
+        // Setup
+        IGame g = new SimpleGame();
+        // -->                             first row     second row (clockwise ie inverted order)
+        int[] mockNormalFields = new int[]{0,1,0,0,1,0,  9,11,0,1,0,20};
+        TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
+        TurnData t0 = g.SetUpGameFromTurnData(t0Setup);
+
+        // Do the turn
+        TurnData t1 = g.DoTurn(8); // Index of Player2
+
+        // No turn processed and turn is still for player 1
+        assertEquals(t0.Turn, 0);
+        assertEquals(t0.NextTurnState,  GameState.TurnP1);
+        assertEquals(t1.Turn, 0);
+        assertEquals(t1.NextTurnState,  GameState.TurnP1);
+    }
+
+    // TODO correct dropping of stones
+
     // TODO check for transform integrity after a bunch of moves
 
     // TODO check other implementation

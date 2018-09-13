@@ -1,5 +1,6 @@
 package com.alexandervanderzalm.game.Model.Logger;
 
+import com.alexandervanderzalm.game.Model.GameState;
 import com.alexandervanderzalm.game.Model.Pits.IPit;
 import com.alexandervanderzalm.game.Model.Pits.IPitCollection;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
@@ -13,6 +14,14 @@ public class LogUtility {
     public static void Log(LogCollection logger, String textLog){
         logger.Log(new TextLog(textLog));
         System.out.println(textLog);
+    }
+
+    public static String LogStart(TurnData data){
+        return LogStart(data.NextTurnState == GameState.TurnP1 ? 0 : 1, data.Turn);
+    }
+
+    public static String LogStart(int playerIndex, int turn){
+        return String.format("Turn %d - %s - ",turn,LogPlayer(playerIndex));
     }
 
     public static String LogPlayer(int playerIndex){

@@ -56,6 +56,11 @@ public class SimpleGame implements IGame{
     @Override
     public TurnData DoTurn(Integer SelectedIndex) {
 
+        // Check for valid input
+        TurnData error = InputUtility.IsValidInput(SelectedIndex,GameToTurnData());
+        if(error != null)
+            return error;
+
         // Prepare gameState next round & current player index
         currentTurn++;
         currentPlayer = nextTurnState == GameState.TurnP1 ? 0 : 1;
@@ -80,15 +85,13 @@ public class SimpleGame implements IGame{
                 continue;
             }
             if (current.GetPlayer() == currentPlayer && hand == 1) {
-                // Extra turn
+                // #########  Extra turn
                 if (current.IsKalaha()) {
                     //Extra turn on last stone in hand drop
                     Log(String.format("Turn %d - %s - Gains an Extra Turn for dropping the last stone in his own Kalaha.",currentTurn, LogPlayer(currentPlayer)));
                     FlipGameState();
-                } // Capture opposite?
+                } // ######## Capture opposite?
                 else if (current.Amount() == 0) {
-
-
                     // add both opposite & the last one into own kalaha
                     IKalahaPit opposite = pits.Opposite(current);
                     int stonesCaptured = opposite.GrabAll(); // Grab first
@@ -107,12 +110,12 @@ public class SimpleGame implements IGame{
                 }
             }
 
-            //Log(String.format("%s Dropped one stone at pit %d",LogPlayer(currentPlayer), pits.IndexOf(current)));
             // Drop stone & log
             current.Add(1);
             hand--;
-            Log(current, 1);
+            Log(current, 1); // No text log of drops (feels to spammy)
         }
+        // TODO Maybe log startIndex and end index of all the dropped stones
 
         // Check for end of game
         // --One of the sides is empty
@@ -138,7 +141,6 @@ public class SimpleGame implements IGame{
         }
 
         // Log new turn
-        //if(nextTurnState == GameState.TurnP1 || nextTurnState == GameState.TurnP2)
         Log(String.format("Turn %d - %s - New Turn",currentTurn +1, LogPlayer(nextTurnState == GameState.TurnP1? 0 : 1)));
 
         return GameToTurnData();

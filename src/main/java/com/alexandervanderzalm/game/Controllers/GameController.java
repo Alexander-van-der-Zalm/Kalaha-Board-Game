@@ -12,8 +12,8 @@ public class GameController {
     GameService game;
 
     @RequestMapping("/game")
-    public TurnData InitializeGame() {
-        return game.InitGame();
+    public TurnData StartNewGame() {
+        return game.StartNewGame();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/game")

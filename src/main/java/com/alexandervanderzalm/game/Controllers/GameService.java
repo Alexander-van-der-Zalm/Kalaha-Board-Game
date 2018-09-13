@@ -13,7 +13,7 @@ public class GameService {
     private IGame game;
 
     // TODO serve multiple game instances(requires hash?)
-    public TurnData InitGame() {
+    public TurnData StartNewGame() {
         game = new SimpleGame();
 
         return game.SetupNewGame();
