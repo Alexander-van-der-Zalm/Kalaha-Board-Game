@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
     *   Reactive approach.
     *   TODO LogicGameFramework & Ruleset (Currently not fully implemented)
  */
-public class SimpleGame implements IGame{
+public class SimpleKalahaGame implements IGame{
 
     private PitCollection<IKalahaPit> pits;
     private GameState nextTurnState;
@@ -38,7 +38,7 @@ public class SimpleGame implements IGame{
     private int currentTurn = 0;
     private LogCollection logger = new LogCollection();
 
-    public SimpleGame() {
+    public SimpleKalahaGame() {
         //this.pits = new ArrayList<>();
     }
 

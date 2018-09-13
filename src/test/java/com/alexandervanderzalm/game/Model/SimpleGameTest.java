@@ -18,7 +18,7 @@ public class SimpleGameTest {
     // Initialize a game
     @Test
     public void SetupNewGame_NewGame_Has14PitsAnd6Stones() {
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         TurnData t0 = g.SetupNewGame();
 
         System.out.println(t0.Pits);
@@ -30,7 +30,7 @@ public class SimpleGameTest {
 
     @Test
     public void DoTurn_InitializedGame_TurnProcessed(){
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         TurnData t0 = g.SetupNewGame();
 
         Assert.isTrue(t0.Pits.get(1).stones == 6, "Check if the selected pit is empty");
@@ -45,7 +45,7 @@ public class SimpleGameTest {
     @Test
     public void DoTurn_EndGame_GameFinished(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         // -->                             first row     second row (clockwise ie inverted order)
         int[] mockNormalFields = new int[]{1,0,0,0,0,0,  9,11,0,0,0,0};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(1,10,mockNormalFields));
@@ -73,7 +73,7 @@ public class SimpleGameTest {
 
     @Test public void DoTurn_ExtraTurnExpected_TurnReceived(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         // -->                             first row     second row (clockwise ie inverted order)
         int[] mockNormalFields = new int[]{1,5,0,0,0,0,  9,11,0,0,0,0};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(1,10,mockNormalFields));
@@ -94,7 +94,7 @@ public class SimpleGameTest {
     // unwinnable condition
     @Test public void DoTurn_UnwinnableEndGame_GameFinished(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         // -->                             first row     second row (clockwise ie inverted order)
         int[] mockNormalFields = new int[]{1,0,1,0,0,0,  9,11,0,1,0,0};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(22,0,mockNormalFields));
@@ -111,7 +111,7 @@ public class SimpleGameTest {
     // Skip opponents kalaha
     @Test public void DoTurn_GoRoundWithALotOfStones_SkipAndNoExtraInOpponentsKalaha(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         // -->                             first row     second row (clockwise ie inverted order)
         int[] mockNormalFields = new int[]{13,0,1,0,0,0,  9,11,0,1,0,0};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(22,0,mockNormalFields));
@@ -128,7 +128,7 @@ public class SimpleGameTest {
     //Capture
     @Test public void DoTurn_LandInOwnEmpty_TransferOpponentsPitToKalaha(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         // -->                             first row     second row (clockwise ie inverted order)
         int[] mockNormalFields = new int[]{0,1,0,0,1,0,  9,11,0,1,0,20};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
@@ -145,7 +145,7 @@ public class SimpleGameTest {
     // Faulty input
     @Test public void DoTurn_FaultyInputInputEmptyIndex_NoTurnProcessed(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         // -->                             first row     second row (clockwise ie inverted order)
         int[] mockNormalFields = new int[]{0,1,0,0,1,0,  9,11,0,1,0,20};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
@@ -162,7 +162,7 @@ public class SimpleGameTest {
     // Faulty input
     @Test public void DoTurn_FaultyInputInputTwiceSameIndex_OneTurnProcessed(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         // -->                             first row     second row (clockwise ie inverted order)
         int[] mockNormalFields = new int[]{1,1,0,0,1,0,  9,11,0,1,0,20};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
@@ -181,7 +181,7 @@ public class SimpleGameTest {
     // Faulty input
     @Test public void DoTurn_FaultyInputWrongIndexForActivePlayer_NoTurnProcessed(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         // -->                             first row     second row (clockwise ie inverted order)
         int[] mockNormalFields = new int[]{0,1,0,0,1,0,  9,11,0,1,0,20};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
@@ -197,10 +197,10 @@ public class SimpleGameTest {
         assertEquals(t1.NextTurnState,  GameState.TurnP1);
     }
 
-    // TODO Check correct dropping of stones
+    // Check correct dropping of stones
     @Test public void DoTurn_DropAFewStones_CorrectlyDropped(){
         // Setup
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         int[] mockNormalFields = new int[]{0,0,0,0,0,12,  0,0,0,0,0,0};
         TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
         TurnData t0 = g.SetUpGameFromTurnData(t0Setup);
@@ -218,11 +218,10 @@ public class SimpleGameTest {
         });
     }
 
-    // TODO check for transform integrity after a bunch of moves
-    // TODO Check correct dropping of stones
+    // Check integrity of transforms
     @Test public void DoTurn_AFewTurn_BoardStateAndPitTransformsPlusOriginalAreEqual(){
         // Setup a normal game
-        IGame g = new SimpleGame();
+        IGame g = new SimpleKalahaGame();
         TurnData t0 = g.SetupNewGame();
         List<LogData> log = new ArrayList<>();
         int[] inputSet = {6,5,13,6};

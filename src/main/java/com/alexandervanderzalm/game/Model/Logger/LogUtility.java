@@ -1,5 +1,6 @@
 package com.alexandervanderzalm.game.Model.Logger;
 
+import com.alexandervanderzalm.game.Model.GameData;
 import com.alexandervanderzalm.game.Model.GameState;
 import com.alexandervanderzalm.game.Model.Pits.IPit;
 import com.alexandervanderzalm.game.Model.Pits.IPitCollection;
@@ -9,6 +10,10 @@ public class LogUtility {
 
     public static void Log(LogCollection logger, IPitCollection pits, IPit pit, int amount){
         logger.Log(new PitLog(pits.IndexOf(pit), amount, pit.Amount()));
+    }
+
+    public static void LogPit(GameData data, IPit pit, int amount){
+        Log(data.Logger,data.Pits,pit,amount);
     }
 
     public static void Log(LogCollection logger, String textLog){
