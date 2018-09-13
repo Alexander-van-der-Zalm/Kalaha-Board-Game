@@ -4,10 +4,7 @@ import com.alexandervanderzalm.game.Model.Logger.LogCollection;
 import com.alexandervanderzalm.game.Model.Logger.LogUtility;
 import com.alexandervanderzalm.game.Model.Logger.PitLog;
 import com.alexandervanderzalm.game.Model.Logger.TextLog;
-import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
-import com.alexandervanderzalm.game.Model.Pits.KalahaPit;
-import com.alexandervanderzalm.game.Model.Pits.PitCollection;
-import com.alexandervanderzalm.game.Model.Pits.PitUtil;
+import com.alexandervanderzalm.game.Model.Pits.*;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 
@@ -69,7 +66,7 @@ public class SimpleGame implements IGame{
         Integer hand = current.GrabAll();
 
         // Log pickup
-        Log(String.format("Turn %d - %s grabbed %d stones at %d.",currentTurn, LogPlayer(currentPlayer),hand,SelectedIndex));
+        Log(String.format("Turn %d - %s - Grabbed %d stones from pit %d.",currentTurn, LogPlayer(currentPlayer),hand,SelectedIndex));
         Log(current, -hand);
 
         // Drop one in the right pit except for the opposite players pit
@@ -86,7 +83,7 @@ public class SimpleGame implements IGame{
                 // Extra turn
                 if (current.IsKalaha()) {
                     //Extra turn on last stone in hand drop
-                    Log(String.format("Turn %d - %s gains an Extra Turn for dropping the last stone in his own Kalaha.",currentTurn, LogPlayer(currentPlayer)));
+                    Log(String.format("Turn %d - %s - Gains an Extra Turn for dropping the last stone in his own Kalaha.",currentTurn, LogPlayer(currentPlayer)));
                     FlipGameState();
                 } // Capture opposite?
                 else if (current.Amount() == 0) {
@@ -100,7 +97,7 @@ public class SimpleGame implements IGame{
                     hand--;
 
                     // Log the same events in order
-                    Log(String.format("Turn %d - %s captured %d stones from pit %d and scored %d.",currentTurn, LogPlayer(currentPlayer), stonesCaptured, pits.IndexOf(opposite), stonesCaptured+1));
+                    Log(String.format("Turn %d - %s - Captured %d stones from opposite pit %d and scored %d.",currentTurn, LogPlayer(currentPlayer), stonesCaptured, pits.IndexOf(opposite), stonesCaptured+1));
                     Log(current, -1);
                     if (stonesCaptured > 0) Log(opposite, -stonesCaptured);
                     Log(kalaha, 1);
@@ -123,6 +120,7 @@ public class SimpleGame implements IGame{
             // Add all pits to their respective owners
             pits.pList.stream().filter((p) -> !p.IsKalaha()).forEach((p) -> pits.KalahaOfPlayer(p.GetPlayer()).Add(p.GrabAll()));
             SetWinner();
+            return GameToTurnData();
         }
 
         // --Unwinnable condition detected
@@ -136,11 +134,12 @@ public class SimpleGame implements IGame{
         if(p1 + pitsInField < p2 || p2 + pitsInField < p1) {
             Log(String.format("Turn %d - Unwinnable condition detected. %s: %d Field: %d %s: %d.",currentTurn ,LogPlayer(0),p1,pitsInField,LogPlayer(1),p2));
             SetWinner();
+            return GameToTurnData();
         }
 
         // Log new turn
-        if(nextTurnState == GameState.TurnP1 || nextTurnState == GameState.TurnP2)
-            Log(String.format("Turn %d - %s  new Turn",currentTurn +1, LogPlayer(nextTurnState == GameState.TurnP1? 0 : 1)));
+        //if(nextTurnState == GameState.TurnP1 || nextTurnState == GameState.TurnP2)
+        Log(String.format("Turn %d - %s - New Turn",currentTurn +1, LogPlayer(nextTurnState == GameState.TurnP1? 0 : 1)));
 
         return GameToTurnData();
     }
@@ -164,8 +163,8 @@ public class SimpleGame implements IGame{
     private TurnData GameToTurnData(){
         TurnData data = new TurnData();
         // Transform pit data into clean rest data
-        // data.Pits = pits.stream().map(x -> new KalahaPitData(x.GetPlayer(),x.IsKalaha(),x.Amount())).collect(Collectors.toList());
-        data.Pits = pits.pList.stream().map(x -> x.Data()).collect(Collectors.toList());
+        data.Pits = pits.pList.stream().map(x -> new KalahaPitData(x.GetPlayer(),x.IsKalaha(),x.Amount())).collect(Collectors.toList());
+        //data.Pits = pits.pList.stream().map(x -> x.Data()).collect(Collectors.toList()); // Not a deep copy...
         data.NextTurnState = nextTurnState;
         data.Turn = currentTurn;
         data.Player1Score = pits.KalahaOfPlayer1().Amount();//pits.Get(0).Amount();
