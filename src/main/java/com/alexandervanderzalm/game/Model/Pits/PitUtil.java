@@ -1,13 +1,36 @@
 package com.alexandervanderzalm.game.Model.Pits;
 
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PitUtil {
 
+    public static List<KalahaPitData> CreatePitDataList(int normalPitsPerPlayer, int stonesAmount){
+        int[] normalPits = new int[normalPitsPerPlayer * 2];
+        Arrays.stream(normalPits).forEach((p) -> p = stonesAmount);
+        return CreatePitDataList(0,0,normalPits);
+    }
 
+    public static List<KalahaPitData> CreatePitDataList(int p1Score, int p2Score, int[] normalPits){
+        // Initialize from normalPits data
+        if(normalPits.length % 2 > 0)
+            System.out.println("CreatePitDataList - NOTE! - normalPits not an even amount");
+
+        List<KalahaPitData> result = new ArrayList<>();
+        // Add normalPits
+        Arrays.stream(normalPits).forEach((p) -> result.add(new KalahaPitData(0,false, p)));
+        // Add kalahas
+        result.add(FirstKalaha(),new KalahaPitData(0,true,p1Score));
+        result.add(SecondKalaha(normalPits.length + 2),new KalahaPitData(0,true,p2Score));
+        SetPlayer(result);
+
+        return result;
+    }
 
     public static List<IKalahaPit> CreatePits(int boardSize, int stonesAmount){
         return CreatePits(boardSize,stonesAmount,null);
@@ -34,6 +57,14 @@ public class PitUtil {
         }
 
         return pits;
+    }
+
+    public static void SetPlayer(List<KalahaPitData> d){
+        d.forEach((p) -> p.player = GetPlayer(d.size(),d.indexOf(p)));
+    }
+
+    public static int GetPlayer(int size, int index){
+        return index < SecondKalaha(size) ? 0 : 1;
     }
 
     public static int Right(int size, int index){

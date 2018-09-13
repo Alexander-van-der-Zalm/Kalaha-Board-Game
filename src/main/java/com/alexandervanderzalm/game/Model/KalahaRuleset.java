@@ -4,7 +4,6 @@ import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
 import com.alexandervanderzalm.game.Model.Pits.IPitCollection;
 import com.alexandervanderzalm.game.Model.Pits.KalahaPit;
 import com.alexandervanderzalm.game.Model.Turn.ITurn;
-import com.alexandervanderzalm.game.Model.Turn.TurnUtil;
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 
@@ -37,10 +36,10 @@ public class KalahaRuleset<T extends IKalahaGame> implements IRuleSet<T> {
         // Setup actions
         Game.Actions().ExtraTurn().Add(() -> {
             Game.CurrentTurn().EndOfTurn().ScheduleMethod((turn) -> {
-                if (turn.Player() == 0)
-                    TurnUtil.SetGameState(turn, GameState.TurnP1);
-                else //if(turn.Player() == 1)
-                    TurnUtil.SetGameState(turn, GameState.TurnP2);
+                //if (turn.Player() == 0)
+                //    TurnDataUtil.SetGameState(turn, GameState.TurnP1);
+                //else //if(turn.Player() == 1)
+                //    TurnDataUtil.SetGameState(turn, GameState.TurnP2);
             });
         });
 

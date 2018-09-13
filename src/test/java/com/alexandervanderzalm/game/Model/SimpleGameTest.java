@@ -1,5 +1,6 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Model.Pits.PitUtil;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import org.junit.Test;
 import org.springframework.util.Assert;
@@ -30,9 +31,9 @@ public class SimpleGameTest {
     @Test
     public void DoTurn_EndGame_GameFinished(){
         IGame g = new SimpleGame();
-        int[] mockState = new int[]{10, 0,0,0,0,0,0, 10,
-                                        0,0,0,0,0,0     };
-
+        //                                 first row     second row (clockwise ie inverted order)
+        int[] mockNormalFields = new int[]{0,0,0,0,0,0,  0,0,0,0,0,0};
+        TurnData d = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
         // TODO implement from mock state
     }
 }
