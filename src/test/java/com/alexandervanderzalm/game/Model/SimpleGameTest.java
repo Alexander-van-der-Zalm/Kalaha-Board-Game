@@ -135,7 +135,6 @@ public class SimpleGameTest {
         assertEquals(t1.Player1Score, 21);
     }
 
-
     // TODO faulty input
     // TODO check for transform integrity after a bunch of moves
 

@@ -2,8 +2,6 @@ package com.alexandervanderzalm.game.Model.Pits;
 
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 
-
-
 public class KalahaPit implements IKalahaPit{
     private KalahaPitData Data;
     private IProcedureCollection OnChanged;
