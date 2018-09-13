@@ -239,7 +239,7 @@ public class SimpleGameTest {
         log.forEach((l)->{
             if(l.Type == LogTypes.PitLog){
                 System.out.println(l.Index + " " + t0.Pits.get(l.Index).stones + " -> +" + l.AmountAdded + " " + l.FinalAmount);
-                //assertEquals((long)l.FinalAmount, t0.Pits.get(l.Index).stones + l.AmountAdded);
+                assertEquals((long)l.FinalAmount, t0.Pits.get(l.Index).stones + l.AmountAdded);
                 t0.Pits.get(l.Index).stones = l.FinalAmount;
             }
         });

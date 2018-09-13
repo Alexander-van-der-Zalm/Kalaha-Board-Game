@@ -122,8 +122,8 @@ public class SimpleGame implements IGame{
                     // TODO do the proper order....
                     // For logging purposes add first
                     current.Add(1);
-                    hand--;
                     Log(current, 1);
+                    hand--;
 
                     // Then remove
                     current.GrabAll();
@@ -133,13 +133,16 @@ public class SimpleGame implements IGame{
                     IKalahaPit opposite = pits.Opposite(current);
                     // Grab stones of the opposite
                     int stonesCaptured = opposite.GrabAll();
+                    if (stonesCaptured > 0) Log(opposite, -stonesCaptured);
 
                     // Add both the hand and the captured stones to the kalaha
                     IKalahaPit kalaha = pits.KalahaOfPlayer(currentPlayer);
-                    kalaha.Add(stonesCaptured + 1);
+                    kalaha.Add(1);
+                    Log(kalaha, 1);
 
+                    kalaha.Add(stonesCaptured);
+                    if (stonesCaptured > 0) Log(kalaha, stonesCaptured);
 
-                    // Log the same events in order
                     Log(String.format("Turn %d - %s - Captured %d stones from opposite pit %d and scored %d.",
                             currentTurn,
                             LogPlayer(currentPlayer),
@@ -147,10 +150,6 @@ public class SimpleGame implements IGame{
                             pits.IndexOf(opposite),
                             stonesCaptured+1
                     ));
-
-                    if (stonesCaptured > 0) Log(opposite, -stonesCaptured);
-                    Log(kalaha, 1);
-                    if (stonesCaptured > 0) Log(kalaha, stonesCaptured);
 
                     continue;
                 }
