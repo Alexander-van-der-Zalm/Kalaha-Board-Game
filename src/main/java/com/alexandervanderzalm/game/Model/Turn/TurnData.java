@@ -10,16 +10,21 @@ import com.alexandervanderzalm.game.Model.Pits.PitUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurnData {
-    // Previous TurnData ?
-    // Next TurnData ?
+/* TurnData
+    Data class that gets send to the client and Holds the simplest representation of the game state
+    Used by view and throughout the model for things such as input validation and testing.
 
+    # Simple Data
+    # Snapshot of the pits
+    # Log changes (of pits, rules and exceptions)
+ */
+public class TurnData {
     public int Turn = 0;
     public int Player1Score = 0;
     public int Player2Score = 0;
-    public GameState NextTurnState = GameState.TurnP1;
-    public List<KalahaPitData> Pits;
-    public List<LogData> Log;
+    public GameState NextTurnState = GameState.TurnP1;      // What will the turn be for the view?
+    public List<KalahaPitData> Pits;                        // The data stored in the pits (stones, player, isKalaha)
+    public List<LogData> Log;                               // Stores all the pit changes & text events (extra_turn,
 
     public TurnData() {
         Pits = new ArrayList<>();
@@ -43,6 +48,4 @@ public class TurnData {
         NextTurnState = nextTurnState;
         Log = log;
     }
-
-
 }

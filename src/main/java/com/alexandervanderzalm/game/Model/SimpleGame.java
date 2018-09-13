@@ -2,19 +2,36 @@ package com.alexandervanderzalm.game.Model;
 
 import com.alexandervanderzalm.game.Model.Logger.LogCollection;
 import com.alexandervanderzalm.game.Model.Logger.LogUtility;
-import com.alexandervanderzalm.game.Model.Logger.PitLog;
-import com.alexandervanderzalm.game.Model.Logger.TextLog;
 import com.alexandervanderzalm.game.Model.Pits.*;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
-import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 
-import java.util.ArrayList;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+/* SimpleGame
+    A simple implementation of the kalaha game.
+
+    # TurnData
+    The primary job is to produce valid TurnData based on a simple input,
+    according to the specified rules.
+
+    # Logging
+    Logs all the transformations of the game.
+     - PitLogs - Mark actual pit/stone changes. Such as the grabbing of stones
+     - TextLogs - Mark important logical events, such as an extra turn or a capture.
+
+    # Setup
+    Controls the flow of logic for setting up a game new or from a previous state.
+
+    # Turns
+    Controls the flow of logic for doing a turn.
+
+    *** Note this is the simple version using primarily if conditional flow.
+    *   This as opposed to the LogicGameFramework & Ruleset variant, which uses a more
+    *   Reactive approach.
+    *   TODO LogicGameFramework & Ruleset (Currently not fully implemented)
+ */
 public class SimpleGame implements IGame{
 
-    //private List<IKalahaPit> pits;
     private PitCollection<IKalahaPit> pits;
     private GameState nextTurnState;
     private int currentPlayer = 0;
@@ -27,13 +44,11 @@ public class SimpleGame implements IGame{
 
     @Override
     public TurnData SetupNewGame() {
-        //int fieldsPerPlayer = 6;
-        //int startStones = 6;
         pits = new PitCollection<>( PitUtil.CreatePits(14,6));
         currentTurn = 0;
         nextTurnState = GameState.TurnP1;
 
-        // Log all the changes
+        // Log all the changes to setup the board
         pits.pList.stream()
                 .filter((p) -> !p.IsKalaha())
                 .forEach((p) -> Log(p, 6));

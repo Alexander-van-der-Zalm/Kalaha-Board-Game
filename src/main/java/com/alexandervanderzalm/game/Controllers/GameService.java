@@ -21,11 +21,6 @@ public class GameService {
 
     // TODO serve multiple game instances(requires hash?)
     public TurnData DoTurn(TurnInputData input) {
-
-        // Validate valid input
-        // TODO validate input
-
-        // If so do the actual turn
         return game.DoTurn(input.SelectedBucket);
     }
 }
