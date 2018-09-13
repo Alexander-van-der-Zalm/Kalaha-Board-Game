@@ -1,19 +1,36 @@
 package com.alexandervanderzalm.game.Model;
 
 import com.alexandervanderzalm.game.Model.Logger.LogCollection;
+import com.alexandervanderzalm.game.Model.Logger.LogUtility;
 import com.alexandervanderzalm.game.Model.Pits.KalahaPitData;
 import com.alexandervanderzalm.game.Model.Pits.PitCollection;
+import com.alexandervanderzalm.game.Model.Pits.PitUtil;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
+import com.alexandervanderzalm.game.Model.Turn.TurnUtil;
 
 import java.util.stream.Collectors;
 
 public class GameData{
     public PitCollection<ReactivePit> Pits;
     public LogCollection Logger;
-    public GameState NextTurnState;
-    public Integer CurrentTurn;
-    public Integer CurrentPlayer;
-    public Integer CurrentHand;
+    public GameState NextTurnState = GameState.TurnP1;
+    public Integer CurrentTurn = 0;
+    public Integer CurrentPlayer = 0;
+    public Integer CurrentHand = 0;
+
+    public GameData() {
+        Pits = new PitCollection<>();
+        Logger = new LogCollection();
+    }
+
+    public GameData(TurnData data) {
+        this();
+        data.Pits.forEach((pit) -> Pits.pList.add(new ReactivePit(pit)));
+        NextTurnState = data.NextTurnState;
+        CurrentPlayer = TurnUtil.GetPlayer(data);
+        CurrentTurn = data.Turn;
+        LogUtility.SetLoggerFromTurnData(Logger,data);
+    }
 
     public TurnData ToTurnData() {
         TurnData data = new TurnData();

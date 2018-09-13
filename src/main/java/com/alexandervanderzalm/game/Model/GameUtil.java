@@ -5,7 +5,7 @@ import com.alexandervanderzalm.game.Model.Turn.TurnData;
 
 public class GameUtil {
 
-    public static TurnData UnwinnableWinCondition(GameData data){//IGame game, PitCollection<IKalahaPit> pits, LogCollection logger, int currentTurn, int currentPlayer){
+    public static TurnData UnwinnableWinCondition(GameData data){
         // --Unwinnable condition detected
         int pitsInField = data.Pits.pList.stream()
                 .filter((p) -> !p.Data().isKalaha)
@@ -52,5 +52,9 @@ public class GameUtil {
         LogUtility.Log(d.Logger, String.format("Congratulations %s!", LogUtility.LogPlayer(d.CurrentPlayer)));
         LogUtility.Log(d.Logger, String.format("Refresh the page to play again.", LogUtility.LogPlayer(d.CurrentPlayer)));
         return d.ToTurnData();
+    }
+
+    public static void FlipGameState(GameData d){
+        d.NextTurnState = d.NextTurnState == GameState.TurnP1 ? GameState.TurnP2 : GameState.TurnP1;
     }
 }

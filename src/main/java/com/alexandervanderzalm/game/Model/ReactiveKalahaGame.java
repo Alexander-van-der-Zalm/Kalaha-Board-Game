@@ -5,6 +5,8 @@ import com.alexandervanderzalm.game.Model.Pits.IPit;
 import com.alexandervanderzalm.game.Model.Pits.KalahaPitData;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Utility.FunctionCollection;
+import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Method;
+import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
 import com.alexandervanderzalm.game.Utility.MethodCollection;
 
 import java.util.List;
@@ -25,8 +27,7 @@ public class ReactiveKalahaGame implements IGame {
         return null;
     }
 
-    // TODO Make a OnGrab, OnAdd methodCollection that logs
-    // That logs
+
     @Override
     public TurnData DoTurn(Integer SelectedIndex) {
         // Check for valid input
@@ -34,7 +35,11 @@ public class ReactiveKalahaGame implements IGame {
         if(error != null)
             return error;
 
-        // 
+        // TODO update Turncounter & flip -- see simple
+
+        // Do the core turn procedure
+        if(Settings.TurnProcedure != null)
+            Settings.TurnProcedure.Process(SelectedIndex);
 
         // Special end of turn scenarios (such as winning)
         List<TurnData> endScenarios = Settings.SpecialEndOfTurnScenarios.Process(Data).stream().filter((end) -> end!=null).collect(Collectors.toList());
@@ -43,12 +48,13 @@ public class ReactiveKalahaGame implements IGame {
 
         return Data.ToTurnData();
     }
-
-
 }
 
 class WireReactiveGame{
-    public static void WireGame(ReactiveKalahaGame game){
+    public static void WireReactiveKalahaGameRules(ReactiveKalahaGame game){
+
+        // Special turn ending scenarios (override a normal to TurnData)
+        game.Settings.SpecialEndOfTurnScenarios = new FunctionCollection<>();
 
         // Normal End Game - Priority 1
         game.Settings.SpecialEndOfTurnScenarios.Add((d) ->{
@@ -61,10 +67,67 @@ class WireReactiveGame{
         });
 
         // Add logging capability
-        ReactivePit pit = game.Data.Pits.Get(0);
-        pit.OnAdd.Add((stones) -> LogUtility.LogPit(game.Data, pit, stones));
-        pit.OnGrab.Add((stones) -> LogUtility.LogPit(game.Data, pit, stones));
+        game.Data.Pits.pList.stream().forEach((pit) ->{
+            pit.OnAdd.Add((stones) -> LogUtility.LogPit(game.Data, pit, stones));
+            pit.OnGrab.Add((stones) -> LogUtility.LogPit(game.Data, pit, stones));
+        });
+
+        // Add extra turn rule
+        game.Data.Pits.pList.stream()
+            .filter((p) -> p.Data().isKalaha)
+            .forEach((pit) ->{
+                pit.OnAdd.Add((stones) -> {
+                    if(game.Data.CurrentHand == 1 && pit.Data().player == game.Data.CurrentPlayer){
+                        LogUtility.Log(game.Data.Logger,String.format("%sGains an Extra Turn for dropping the last stone in his own Kalaha.",
+                                LogUtility.LogStart(game.Data.CurrentPlayer ,  game.Data.CurrentTurn)
+                        ));
+                        GameUtil.FlipGameState(game.Data);
+                    }
+                });
+        });
+
+        // Add capture rule
+        game.Data.Pits.pList.stream().forEach((pit) ->{
+            pit.OnAdd.Add((stones) -> LogUtility.LogPit(game.Data, pit, stones));
+        });
+
+
+        // The core turn procedure definition
+        game.Settings.TurnProcedure = (index) -> {
+            ReactivePit current = game.Data.Pits.Get(index);
+            game.Data.CurrentHand = current.GrabAll();
+
+            // Log pickup
+            LogUtility.Log(game.Data.Logger,
+                String.format("%s- Grabbed %d stones from pit %d.",
+                    LogUtility.LogStart(game.Data.CurrentPlayer ,  game.Data.CurrentTurn),
+                    game.Data.CurrentHand,
+                    index
+                )
+            );
+
+            // The main drop it one by one loop
+            while(game.Data.CurrentHand > 0){
+                // Move one to the right (counter-clockWise)
+                current = game.Data.Pits.Right(current);
+
+                // Skip when landed upon oponents kalaha
+                if (current.Data().isKalaha && current.Data().player != game.Data.CurrentPlayer) {
+                    LogUtility.Log(game.Data.Logger, String.format("Turn %d - Skipped dropping a stone at opponents Kalaha.", game.Data.CurrentTurn));
+                    continue;
+                }
+
+                // Remove from hand and add to the current pit
+                game.Data.CurrentHand--;
+                current.Add(1);
+            }
+        };
     }
+}
+
+class ReactiveGameData{
+    public FunctionCollection<GameData,TurnData> SpecialEndOfTurnScenarios;
+    public Method<Integer> TurnProcedure;
 }
 
 class ReactivePit implements IPit<Integer>{
@@ -73,6 +136,13 @@ class ReactivePit implements IPit<Integer>{
     public MethodCollection<Integer> OnGrab = new MethodCollection<>();
 
     private KalahaPitData data;
+
+    public ReactivePit(KalahaPitData data) {
+        this.data = data;
+    }
+
+    public ReactivePit() {
+    }
 
     @Override
     public void Add(Integer stones) {
@@ -98,6 +168,4 @@ class ReactivePit implements IPit<Integer>{
     }
 }
 
-class ReactiveGameData{
-    public FunctionCollection<GameData,TurnData> SpecialEndOfTurnScenarios;
-}
+
