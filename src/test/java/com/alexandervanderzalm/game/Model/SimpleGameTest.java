@@ -1,9 +1,16 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Model.Logger.LogData;
+import com.alexandervanderzalm.game.Model.Logger.LogTypes;
 import com.alexandervanderzalm.game.Model.Pits.PitUtil;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import org.junit.Test;
 import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class SimpleGameTest {
@@ -190,9 +197,56 @@ public class SimpleGameTest {
         assertEquals(t1.NextTurnState,  GameState.TurnP1);
     }
 
-    // TODO correct dropping of stones
+    // TODO Check correct dropping of stones
+    @Test public void DoTurn_DropAFewStones_CorrectlyDropped(){
+        // Setup
+        IGame g = new SimpleGame();
+        int[] mockNormalFields = new int[]{0,0,0,0,0,12,  0,0,0,0,0,0};
+        TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
+        TurnData t0 = g.SetUpGameFromTurnData(t0Setup);
+
+        // Do the turn
+        TurnData t1 = g.DoTurn(6); // Has 12 stones
+
+        // No turn processed and turn is still for player 1
+        t1.Pits.stream().filter((p) ->  // Skip the opponents kalaha & index 6
+            !(p.isKalaha && p.player == 1)
+            && t1.Pits.indexOf(p) != 6
+        ).forEach((p) ->{
+            System.out.println( t1.Pits.indexOf(p) + " " + p.stones);
+            assertEquals(1,(long)p.stones);
+        });
+    }
 
     // TODO check for transform integrity after a bunch of moves
+    // TODO Check correct dropping of stones
+    @Test public void DoTurn_AFewTurn_BoardStateAndPitTransformsPlusOriginalAreEqual(){
+        // Setup a normal game
+        IGame g = new SimpleGame();
+        TurnData t0 = g.SetupNewGame();
+        List<LogData> log = new ArrayList<>();
+        int[] inputSet = {6,5,13,6};
+        List<TurnData> turns = new ArrayList<>();
+
+        // Do a few turns
+        Arrays.stream(inputSet).forEach((i)->{
+            TurnData turn = g.DoTurn(i);
+            log.addAll(turn.Log);
+            turns.add(turn);
+        });
+
+        // Apply all the changes to turn0
+        log.forEach((l)->{
+            if(l.Type == LogTypes.PitLog){
+                System.out.println(l.Index + " " + t0.Pits.get(l.Index).stones + " -> +" + l.AmountAdded + " " + l.FinalAmount);
+                //assertEquals((long)l.FinalAmount, t0.Pits.get(l.Index).stones + l.AmountAdded);
+                t0.Pits.get(l.Index).stones = l.FinalAmount;
+            }
+        });
+
+        final TurnData finalTurn = turns.get(turns.size()-1);
+        t0.Pits.forEach((p) -> assertEquals(p.stones, finalTurn.Pits.get(t0.Pits.indexOf(p)).stones));
+    }
 
     // TODO check other implementation
 }

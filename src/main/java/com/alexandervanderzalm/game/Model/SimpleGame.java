@@ -54,7 +54,7 @@ public class SimpleGame implements IGame{
                 .forEach((p) -> Log(p, 6));
 
         Log("Initialized a new kalaha game.");
-        Log(String.format("Turn %d - %s new Turn",currentTurn + 1, LogPlayer(currentPlayer)));
+        Log(String.format("Turn %d - %s - New Turn",currentTurn + 1, LogPlayer(currentPlayer)));
         return GameToTurnData();
     }
 
@@ -84,9 +84,16 @@ public class SimpleGame implements IGame{
         // Grab all from the currently selected pit
         IKalahaPit current = pits.Get(SelectedIndex);
         Integer hand = current.GrabAll();
+        int handBackup = hand;
 
         // Log pickup
-        Log(String.format("Turn %d - %s - Grabbed %d stones from pit %d.",currentTurn, LogPlayer(currentPlayer),hand,SelectedIndex));
+        Log(String.format("Turn %d - %s - Grabbed %d stones from pit %d.",
+                currentTurn,
+                LogPlayer(currentPlayer),
+                hand,
+                SelectedIndex
+        ));
+
         Log(current, -hand);
 
         // Drop one in the right pit except for the opposite players pit
@@ -99,24 +106,48 @@ public class SimpleGame implements IGame{
                 Log(String.format("Turn %d - Skipped dropping a stone at opponents Kalaha.",currentTurn));
                 continue;
             }
+
             if (current.GetPlayer() == currentPlayer && hand == 1) {
                 // #########  Extra turn
                 if (current.IsKalaha()) {
                     //Extra turn on last stone in hand drop
-                    Log(String.format("Turn %d - %s - Gains an Extra Turn for dropping the last stone in his own Kalaha.",currentTurn, LogPlayer(currentPlayer)));
+                    Log(String.format("Turn %d - %s - Gains an Extra Turn for dropping the last stone in his own Kalaha.",
+                            currentTurn,
+                            LogPlayer(currentPlayer)
+                    ));
                     FlipGameState();
+
                 } // ######## Capture opposite?
                 else if (current.Amount() == 0) {
+                    // TODO do the proper order....
+                    // For logging purposes add first
+                    current.Add(1);
+                    hand--;
+                    Log(current, 1);
+
+                    // Then remove
+                    current.GrabAll();
+                    Log(current, -1);
+
                     // add both opposite & the last one into own kalaha
                     IKalahaPit opposite = pits.Opposite(current);
-                    int stonesCaptured = opposite.GrabAll(); // Grab first
+                    // Grab stones of the opposite
+                    int stonesCaptured = opposite.GrabAll();
+
+                    // Add both the hand and the captured stones to the kalaha
                     IKalahaPit kalaha = pits.KalahaOfPlayer(currentPlayer);
-                    kalaha.Add(stonesCaptured + 1); // Add both the hand and the captured stones to the kalaha
-                    hand--;
+                    kalaha.Add(stonesCaptured + 1);
+
 
                     // Log the same events in order
-                    Log(String.format("Turn %d - %s - Captured %d stones from opposite pit %d and scored %d.",currentTurn, LogPlayer(currentPlayer), stonesCaptured, pits.IndexOf(opposite), stonesCaptured+1));
-                    Log(current, -1);
+                    Log(String.format("Turn %d - %s - Captured %d stones from opposite pit %d and scored %d.",
+                            currentTurn,
+                            LogPlayer(currentPlayer),
+                            stonesCaptured,
+                            pits.IndexOf(opposite),
+                            stonesCaptured+1
+                    ));
+
                     if (stonesCaptured > 0) Log(opposite, -stonesCaptured);
                     Log(kalaha, 1);
                     if (stonesCaptured > 0) Log(kalaha, stonesCaptured);
@@ -130,8 +161,11 @@ public class SimpleGame implements IGame{
             hand--;
             Log(current, 1); // No text log of drops (feels to spammy)
         }
-        // TODO Maybe log startIndex and end index of all the dropped stones
-
+        Log(String.format("%sDropped %d stones, clockwise one by one ending at %d.",
+                LogUtility.LogStart(currentPlayer,currentTurn),
+                handBackup,
+                pits.IndexOf(current)
+        ));
         // Check for end of game
         // --One of the sides is empty
         if(pits.pList.stream().filter((p) -> !p.IsKalaha() && p.Amount() == 0 && p.GetPlayer() == 0).count() == 6 || pits.pList.stream().filter((p) ->!p.IsKalaha() && p.Amount() == 0 && p.GetPlayer() == 1).count() == 6) {
@@ -171,6 +205,7 @@ public class SimpleGame implements IGame{
             currentPlayer = 1;
         }
         Log(String.format("Congratulations %s!", LogPlayer(currentPlayer)));
+        Log(String.format("Refresh the page to play again.", LogPlayer(currentPlayer)));
     }
 
     private void FlipGameState(){

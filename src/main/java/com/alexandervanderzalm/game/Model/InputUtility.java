@@ -18,6 +18,13 @@ public class InputUtility {
                     selectedIndex
             ));
 
+        // Is a kalaha
+        if(PitUtil.FirstKalaha() == selectedIndex || selectedIndex == PitUtil.SecondKalaha(data.Pits.size()))
+            return InvalidInput(data, String.format("%s Error!! - Index %d is a Kalaha",
+                    LogUtility.LogStart(data),
+                    selectedIndex
+            ));
+
         // Not valid for currentPlayer
         if(PitUtil.GetPlayer(data.Pits.size(),selectedIndex) != currentPlayer)
             return InvalidInput(data, String.format("%s Error!! - Index %d does not belong to %s",
