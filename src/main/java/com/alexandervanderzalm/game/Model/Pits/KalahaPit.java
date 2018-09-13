@@ -13,6 +13,11 @@ public class KalahaPit implements IKalahaPit{
         Data = new KalahaPitData();
     }
 
+    public KalahaPit(KalahaPitData data, IProcedureCollection onChanged) {
+        Data = data;
+        OnChanged = onChanged;
+    }
+
     @Override
     public Boolean IsKalaha() {
         return Data.isKalaha;

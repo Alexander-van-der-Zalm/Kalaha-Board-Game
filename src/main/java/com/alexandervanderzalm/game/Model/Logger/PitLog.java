@@ -1,38 +1,20 @@
 package com.alexandervanderzalm.game.Model.Logger;
 
-import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
+public class PitLog extends LogData implements ILog {
 
-interface IPitLog extends  ILog {
-    IKalahaPit Pit();
-    Integer Index();
-    Integer AmountAdded();
-}
-
-public class PitLog extends LogData implements IPitLog  {
-
-    IKalahaPit pit;
-
-    public PitLog(IKalahaPit pit, int index, int amountAdded, int finalAmount) {
+    public PitLog(int index, int amountAdded, int finalAmount) {
         super(LogTypes.PitLog);
-        this.pit = pit;
         super.Index = index;
         super.AmountAdded = amountAdded;
         super.FinalAmount = finalAmount;
     }
 
-    @Override
-    public IKalahaPit Pit() {
-        return null;
-    }
-
-    @Override
-    public Integer Index() {
-        return null;
-    }
-
-    @Override
-    public Integer AmountAdded() {
-        return null;
+    public PitLog(LogData l){
+        super(LogTypes.PitLog);
+        super.Index = l.Index;
+        super.AmountAdded = l.AmountAdded;
+        super.FinalAmount = l.FinalAmount;
+        super.Log = l.Log;
     }
 
     @Override

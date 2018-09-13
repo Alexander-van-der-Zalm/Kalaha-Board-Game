@@ -1,5 +1,6 @@
 package com.alexandervanderzalm.game.Model.Pits;
 
+import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -32,9 +33,17 @@ public class PitUtil {
         return result;
     }
 
+    public static List<IKalahaPit> CreatePitsFromTurnData(TurnData data){
+        List<IKalahaPit> pits = new ArrayList<>();
+        data.Pits.forEach((p) -> pits.add(new KalahaPit(p, new ProcedureCollection())));
+        return pits;
+    }
+
     public static List<IKalahaPit> CreatePits(int boardSize, int stonesAmount){
         return CreatePits(boardSize,stonesAmount,null);
     }
+
+
 
     public static List<IKalahaPit> CreatePits(int boardSize, int stonesAmount, ProcedureCollection onChanged){
         List<IKalahaPit> pits = new ArrayList<>();

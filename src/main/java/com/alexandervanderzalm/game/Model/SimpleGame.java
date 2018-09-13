@@ -1,13 +1,18 @@
 package com.alexandervanderzalm.game.Model;
 
 import com.alexandervanderzalm.game.Model.Logger.LogCollection;
+import com.alexandervanderzalm.game.Model.Logger.LogUtility;
 import com.alexandervanderzalm.game.Model.Logger.PitLog;
 import com.alexandervanderzalm.game.Model.Logger.TextLog;
 import com.alexandervanderzalm.game.Model.Pits.IKalahaPit;
+import com.alexandervanderzalm.game.Model.Pits.KalahaPit;
 import com.alexandervanderzalm.game.Model.Pits.PitCollection;
 import com.alexandervanderzalm.game.Model.Pits.PitUtil;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
+import com.alexandervanderzalm.game.Utility.ProcedureCollection;
 
+import java.util.ArrayList;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class SimpleGame implements IGame{
@@ -38,6 +43,16 @@ public class SimpleGame implements IGame{
 
         Log("Initialized a new kalaha game.");
         Log(String.format("Turn %d - %s new Turn",currentTurn + 1, LogPlayer(currentPlayer)));
+        return GameToTurnData();
+    }
+
+    @Override
+    public TurnData SetUpGameFromTurnData(TurnData data) {
+        pits = new PitCollection<>(PitUtil.CreatePitsFromTurnData(data));
+        nextTurnState = data.NextTurnState;
+        currentPlayer = nextTurnState == GameState.TurnP1 ? 0 : 1; // Not really relevant
+        currentTurn = data.Turn;
+        LogUtility.SetLoggerFromTurnData(logger,data);
         return GameToTurnData();
     }
 
@@ -119,7 +134,7 @@ public class SimpleGame implements IGame{
         int p1 = pits.KalahaOfPlayer1().Amount();
         int p2 = pits.KalahaOfPlayer2().Amount();
         if(p1 + pitsInField < p2 || p2 + pitsInField < p1) {
-            Log(String.format("Turn %d - Unwinnable condition detected. %s: %d Field: %d %s: %d.",currentTurn ,LogPlayer(0),p1,LogPlayer(1),pitsInField,p2));
+            Log(String.format("Turn %d - Unwinnable condition detected. %s: %d Field: %d %s: %d.",currentTurn ,LogPlayer(0),p1,pitsInField,LogPlayer(1),p2));
             SetWinner();
         }
 
@@ -128,19 +143,6 @@ public class SimpleGame implements IGame{
             Log(String.format("Turn %d - %s  new Turn",currentTurn +1, LogPlayer(nextTurnState == GameState.TurnP1? 0 : 1)));
 
         return GameToTurnData();
-    }
-
-    private void Log(IKalahaPit pit, int amount){
-        logger.Log(new PitLog(pit, pits.IndexOf(pit), amount, pit.Amount()));
-    }
-
-    private void Log(String textLog){
-        logger.Log(new TextLog(textLog));
-        System.out.println(textLog);
-    }
-
-    private String LogPlayer(int playerIndex){
-        return  playerIndex == 0 ? "<span class = 'Player1Log'>Player1</span>" : "<span class = 'Player2Log'>Player2</span>";
     }
 
     private void SetWinner(){
@@ -171,5 +173,17 @@ public class SimpleGame implements IGame{
         data.Log = logger.GetLogData();
         logger.ClearLogs();
         return data;
+    }
+
+    private void Log(IKalahaPit pit, int amount){
+        LogUtility.Log(logger,pits,pit,amount);
+    }
+
+    private void Log(String textLog){
+        LogUtility.Log(logger,textLog);
+    }
+
+    private String LogPlayer(int playerIndex){
+        return LogUtility.LogPlayer(playerIndex);
     }
 }

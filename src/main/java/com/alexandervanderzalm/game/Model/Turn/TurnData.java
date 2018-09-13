@@ -27,6 +27,7 @@ public class TurnData {
     }
 
     public TurnData(List<KalahaPitData> pits) {
+        this();
         Pits = pits;
         Player1Score = pits.get(PitUtil.FirstKalaha()).stones;
         Player2Score = pits.get(PitUtil.SecondKalaha(pits.size())).stones;
