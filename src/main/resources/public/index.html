@@ -266,7 +266,7 @@ h3{
             StartDropDownAnimation(el, Math.abs(amount), 0, -100, onAnimationEnd);
         }
     }
-
+    
     function StartDropDownAnimation(el, amount, startOffset, goalOffset, onAnimationEnd){
         var spawn = document.createElement('div');
         spawn.innerHTML = amount;
@@ -280,14 +280,20 @@ h3{
 
         // Remove the spawned object when animation is finished
         setTimeout(() => spawn.style.top = (goalOffset + el.offsetTop).toString() + "px", 10);
-        spawn.addEventListener('transitionend', ()=>spawn.remove());//console.log("AnimationFinished"));
-        if(onAnimationEnd != null)
+        spawn.addEventListener('transitionend', ()=>spawn.remove());
+        if(onAnimationEnd != null){
             spawn.addEventListener('transitionend', onAnimationEnd);
+            lastSpawn = spawn;
+        }
     }
     
     function SetPitValue(Index, Amount){
         pits[Index].innerHTML = Amount;
     }
+
+    // Bug fix comments
+    // The problem occurs when +1 with a delayed setPitValue gets in conflict with the later -1 
+    var lastSpawn; // This reference is the solution to that.
 
     function SetGameViewFromJSONViaTransforms(gameState){
         // Do animation per transform with a delay
@@ -300,25 +306,29 @@ h3{
             
             switch(e.Type){
                 case "PitLog":
-                if(e.AmountAdded > 0){
-                setTimeout(
-                    () => StartDropDownAnimationSimple(pits[e.Index],e.AmountAdded,
-                        () => SetPitValue(e.Index,e.FinalAmount)
-                    ), 
-                    animDelay
-                );}
-                else{
-                    setTimeout(() => StartDropDownAnimationSimple(pits[e.Index],e.AmountAdded,null),animDelay);
-                    setTimeout(() => SetPitValue(e.Index,e.FinalAmount),animDelay);
-                }
+                    if(e.AmountAdded > 0){
+                    setTimeout(
+                        () => StartDropDownAnimationSimple(pits[e.Index],e.AmountAdded,
+                            SetPitValue(e.Index,e.FinalAmount) // Delayed
+                        ), 
+                        animDelay
+                    );}
+                    else{
+                        setTimeout(() => StartDropDownAnimationSimple(pits[e.Index], e.AmountAdded,null), animDelay);
+                        setTimeout(() => SetPitValue(e.Index,e.FinalAmount), animDelay);
+                        setTimeout(() => {
+                            if(lastSpawn != null)
+                                lastSpawn.removeEventListener('transitionend', SetPitValue);
+                            }, animDelay); // Instant - Later - Can remove
+                    }
                 break;
                 case "TextLog":
-                setTimeout(
-                    () => log.insertAdjacentHTML('afterbegin',e.Log + "<br\>")//.innerHTML = e.Log + "<br\>"+ log.innerHTML
-                );
+                    setTimeout(
+                        () => log.insertAdjacentHTML('afterbegin',e.Log + "<br\>")//.innerHTML = e.Log + "<br\>"+ log.innerHTML
+                    );
                 break;
                 default:
-                console.log("Text Log type not found");
+                    console.log("Text Log type not found");
                 break;
             }
             
