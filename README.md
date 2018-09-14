@@ -9,6 +9,7 @@
 1. Clone the git/unzip to a local directory
 2. Run the Application found in Root/src/main/java/com.alexandervanderzalm.game/Application.java
 3. Open browser and go to <a href="http://localhost:8080/">http://localhost:8080/</a>  *~Tested primarily in Chrome (Firefox looks good too)*
+4. *Optionally change the \src\main\java\com.alexandervanderzalm.game\Controllers\GameService.java file to run the simple variant.*
 
 ## Basic architecture
 The game is implemented using a basic MVC like architecture with a Rest API.
