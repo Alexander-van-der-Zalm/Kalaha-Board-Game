@@ -1,13 +1,13 @@
 # Kalaha-Board-Game 
-**Web technology based game.**
+**Web technology based game.**<br/>
 **Back-End: Java Spring Boot (starter-web & devtools), Rest API, MVC architecture, JUnit, Gradle, (TomCat local server) -- Intellij** <br/>
 **Front-End: HTML, CSS, Vanilla Javascript -- VisualCode**<br/>
 <a href="https://alexandervanderzalm.com/">Made by Alexander van der Zalm</a> - <a href="https://github.com/Bahamutho/Kalaha-Board-Game">Github</a>
 
 ## Setup
 
-1. Clone the git/unzipping to a local directory
-2. Run the Application found in Root/src/main/java/com.alexandervanderzalm.game/Application
+1. Clone the git/unzip to a local directory
+2. Run the Application found in Root/src/main/java/com.alexandervanderzalm.game/Application.java
 3. Open browser and go to <a href="http://localhost:8080/">http://localhost:8080/</a>  *~Tested primarily in Chrome (Firefox looks good too)*
 
 ## Basic architecture
@@ -48,7 +48,7 @@ This is the interface which a game should conform to.
 ```
 ### Model
 
-The model consists of an implementation of IGame of which there are two and a few support packages (logger, pits, turn and game). A simple one (SimpleKalahaGame) and a reactive one (ReactiveKalahaGame). 
+The model consists of an implementation of IGame of which there are two and a few support packages (logger, pits, turn and game). The two IGame implementations are the simple one (SimpleKalahaGame) and the reactive one (ReactiveKalahaGame). 
 
 **SimpleKalahaGame**
 
@@ -60,9 +60,9 @@ The simple one is the result of quick coding to get it working as quickly as pos
 * Logging changes
 * Setting up a game anew and from a turn
 
-**ReactieKalahaGame**
+**ReactiveKalahaGame**
 
-The basic idea is to separate some of those responsibilities to their own classes to minimize the responsibilities per class. This is done by essentially having a skeleton **ReactieKalahaGame** class, which has various (reactive) method hooks in **ReactiveGameFunctionality** and **ReactivePit** (OnGrab/OnAdd) and holds the *runtime* data in **GameData** (which is responsible for changing to and from TurnData). 
+The basic idea is to separate some of the earlier mentioned responsibilities to their own classes to minimize the responsibilities per class. This is done by essentially having a skeleton **ReactiveKalahaGame** class, which has various (reactive) method hooks in **ReactiveGameFunctionality** and **ReactivePit** (OnGrab/OnAdd) and holds the *runtime* data in **GameData** (which is responsible for changing to and from TurnData). 
 
 ```Java
 public class ReactiveKalahaGame implements IGame {
@@ -113,7 +113,10 @@ game.Data.Pits.Stream()
 
 <img src="https://alexandervanderzalm.com/wp-content/uploads/2018/09/Kalaha-Board-Game-Alexander-van-der-Zalm.png" data-canonical-src="https://alexandervanderzalm.com/wp-content/uploads/2018/09/Kalaha-Board-Game-Alexander-van-der-Zalm.png" width="600" />
 
-The view was made with HTML,CSS, and Vanilla Javascript. The javascript contains a simple animation system to show whats happening pit transformation wise and a simple log system to further make it clear what is happening.
+The view was made with HTML,CSS, and Vanilla Javascript. The javascript contains:
+* Rest API Get & Post calls to /game on refresh and on pit.onclick.
+* A simple delayed animation system to show whats happening pit transformation wise. 
+* A simple log system to further make it clear what is happening.
 
 *I know the view was not important. However it is nice to note that I in fact do enjoy working front-end as well and am particularly interested in Typescript, WebGL and WebAssembly.*
 
@@ -122,6 +125,8 @@ The html file can be found in: /Root/src/main/resources/public/index.html.
 ## Test Driven Development
 
 During the development more tests were added as the game got together. Once the simplegame variant was made a tweak to the original SimpleGameTest made it so that both the new ReactiveGame and the old SimpleGame implementation could directly be tested with all these tests. Then it was simply making sure all the tests passed and developing accordingly. With actual testing a few bugs were identified and added to the test catalog, which would then again also run and test the old implementation. 
+
+Of particular note is the Model/GameTest test file which tests most of the rules and interactions.
 
 In this project tests were made primarily for the more error prone parts of the project and has decent coverage in that regard.
 
@@ -132,7 +137,7 @@ Via Intellij right click on the /Root/test/ folder and run all tests.
 
 **Make variants via ReactiveGameRules**
 
-With the current separation comes relatively ease to extend and iterate over the functionality of the game, in the case that this was an actual iterative product. A game variant pretty much comes down to writing a new entry into ReactiveGameRules class.
+With the current separation comes relatively ease to extend and iterate over the functionality of the game, in the case that this was an actual iterative product. A game variant pretty much comes down to writing hookup log in a new entry into ReactiveGameRules class.
 
 **Serve games from a repository**
 
