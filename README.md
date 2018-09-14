@@ -138,7 +138,7 @@ Via Intellij right click on the /Root/test/ folder and run all tests.
 
 **Make variants via ReactiveGameRules**
 
-With the current separation comes relatively ease to extend and iterate over the functionality of the game, in the case that this was an actual iterative product. A game variant pretty much comes down to writing hookup log in a new entry into ReactiveGameRules class.
+With the current separation comes relatively ease to extend and iterate over the functionality of the game, in the case that this was an actual iterative product. A game variant pretty much comes down to writing hookup logic in a new entry into ReactiveGameRules class.
 
 **Serve games from a repository**
 
