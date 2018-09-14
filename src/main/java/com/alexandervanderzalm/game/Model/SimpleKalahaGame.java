@@ -41,7 +41,6 @@ public class SimpleKalahaGame implements IGame {
     private LogCollection logger = new LogCollection();
 
     public SimpleKalahaGame() {
-        //this.pits = new ArrayList<>();
     }
 
     @Override
@@ -55,7 +54,7 @@ public class SimpleKalahaGame implements IGame {
                 .filter((p) -> !p.IsKalaha())
                 .forEach((p) -> Log(p, 6));
 
-        Log("Initialized a new kalaha game.");
+        Log("Initialized a new *simple* kalaha game.");
         Log(String.format("Turn %d - %s - New Turn",currentTurn + 1, LogPlayer(currentPlayer)));
         return GameToTurnData();
     }

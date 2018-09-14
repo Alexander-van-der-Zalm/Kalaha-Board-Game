@@ -13,14 +13,14 @@ public class GameService {
     // Change this to a gameRepo
     private IGame game;
 
-    // TODO serve multiple game instances(requires hash?)
+    // TODO serve multiple game instances(requires gameID?)
     public TurnData StartNewGame() {
-        game = new ReactiveKalahaGame();//new SimpleKalahaGame();
-
+        game = new ReactiveKalahaGame();
+        //game = new SimpleKalahaGame();  // Uncomment this to run the simple version
         return game.SetupNewGame();
     }
 
-    // TODO serve multiple game instances(requires hash?)
+    // TODO serve multiple game instances
     public TurnData DoTurn(TurnInputData input) {
         return game.DoTurn(input.SelectedBucket);
     }
