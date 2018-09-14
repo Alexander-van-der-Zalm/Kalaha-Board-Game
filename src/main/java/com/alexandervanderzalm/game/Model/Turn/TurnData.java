@@ -3,7 +3,7 @@ package com.alexandervanderzalm.game.Model.Turn;
 
 import com.alexandervanderzalm.game.Model.Game.GameState;
 import com.alexandervanderzalm.game.Model.Logger.LogData;
-import com.alexandervanderzalm.game.Model.Pits.KalahaPitData;
+import com.alexandervanderzalm.game.Model.Pits.PitData;
 import com.alexandervanderzalm.game.Model.Pits.PitUtil;
 
 import java.util.ArrayList;
@@ -22,26 +22,26 @@ public class TurnData {
     public int Player1Score = 0;
     public int Player2Score = 0;
     public GameState NextTurnState = GameState.TurnP1;      // What will the turn be for the view?
-    public List<KalahaPitData> Pits;                        // The data stored in the pits (stones, player, isKalaha)
-    public List<LogData> Log;                               // Stores all the pit changes & text events (extra_turn,
+    public List<PitData> Pits;                        // The data stored in the pits (stones, player, isKalaha)
+    public List<LogData> Log;                               // Stores all the pit changes & text events (extra_turn, capture, etc.)
 
     public TurnData() {
         Pits = new ArrayList<>();
         Log = new ArrayList<>();
     }
 
-    public TurnData(List<KalahaPitData> pits) {
+    public TurnData(List<PitData> pits) {
         this();
         Pits = pits;
         Player1Score = pits.get(PitUtil.FirstKalaha()).stones;
         Player2Score = pits.get(PitUtil.SecondKalaha(pits.size())).stones;
     }
 
-    public TurnData(int turn, GameState nextTurnState, List<KalahaPitData> pits) {
+    public TurnData(int turn, GameState nextTurnState, List<PitData> pits) {
         this(turn,nextTurnState,pits,new ArrayList<>());
     }
 
-    public TurnData(int turn, GameState nextTurnState, List<KalahaPitData> pits, List<LogData> log) {
+    public TurnData(int turn, GameState nextTurnState, List<PitData> pits, List<LogData> log) {
         this(pits);
         Turn = turn;
         NextTurnState = nextTurnState;

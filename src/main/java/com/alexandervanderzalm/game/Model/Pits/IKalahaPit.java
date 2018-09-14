@@ -5,5 +5,5 @@ public interface IKalahaPit extends IObservedPit<Integer> {
     void MakeKalaha();
     Integer GetPlayer();
     void SetPlayer(Integer player);
-    KalahaPitData Data();
+    PitData Data();
 }

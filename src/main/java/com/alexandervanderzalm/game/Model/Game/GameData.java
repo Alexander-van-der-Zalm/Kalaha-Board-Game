@@ -2,7 +2,7 @@ package com.alexandervanderzalm.game.Model.Game;
 
 import com.alexandervanderzalm.game.Model.Logger.LogCollection;
 import com.alexandervanderzalm.game.Model.Logger.LogUtility;
-import com.alexandervanderzalm.game.Model.Pits.KalahaPitData;
+import com.alexandervanderzalm.game.Model.Pits.PitData;
 import com.alexandervanderzalm.game.Model.Pits.PitCollection;
 import com.alexandervanderzalm.game.Model.Pits.ReactivePit;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
@@ -37,7 +37,7 @@ public class GameData{
         TurnData data = new TurnData();
 
         // Transform pit data into clean rest data
-        data.Pits = Pits.pList.stream().map(x -> new KalahaPitData(x.Data().player, x.Data().isKalaha, x.Amount())).collect(Collectors.toList());
+        data.Pits = Pits.pList.stream().map(x -> new PitData(x.Data().player, x.Data().isKalaha, x.Amount())).collect(Collectors.toList());
         //data.Pits = pits.pList.stream().map(x -> x.Data()).collect(Collectors.toList()); // Not a deep copy...
         data.NextTurnState = NextTurnState;
         data.Turn = CurrentTurn;

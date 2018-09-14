@@ -1,5 +1,7 @@
 package com.alexandervanderzalm.game.Model.Pits;
 
+import java.util.stream.Stream;
+
 public interface IPitCollection<T extends IPit> {
 
     public T Right(int index);
@@ -13,6 +15,7 @@ public interface IPitCollection<T extends IPit> {
     public T KalahaOfPlayer(int currentPlayer);
     public Integer IndexOf(T Pit);
     public T Get(int index);
+    public Stream<T> Stream();
 }
 
 // Becomes Pitcollection[x].Right()

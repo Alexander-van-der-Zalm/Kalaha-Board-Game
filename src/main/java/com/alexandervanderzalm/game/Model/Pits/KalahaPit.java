@@ -3,15 +3,15 @@ package com.alexandervanderzalm.game.Model.Pits;
 import com.alexandervanderzalm.game.Utility.IProcedureCollection;
 
 public class KalahaPit implements IKalahaPit{
-    private KalahaPitData Data;
+    private PitData Data;
     private IProcedureCollection OnChanged;
 
     public KalahaPit(IProcedureCollection onChanged) {
         OnChanged = onChanged;
-        Data = new KalahaPitData();
+        Data = new PitData();
     }
 
-    public KalahaPit(KalahaPitData data, IProcedureCollection onChanged) {
+    public KalahaPit(PitData data, IProcedureCollection onChanged) {
         Data = data;
         OnChanged = onChanged;
     }
@@ -37,7 +37,7 @@ public class KalahaPit implements IKalahaPit{
     }
 
     @Override
-    public KalahaPitData Data() {
+    public PitData Data() {
         return Data;
     }
 

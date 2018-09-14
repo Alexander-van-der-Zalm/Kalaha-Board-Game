@@ -2,6 +2,7 @@ package com.alexandervanderzalm.game.Model.Pits;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class PitCollection<T extends IPit> implements IPitCollection<T> {
 
@@ -68,5 +69,10 @@ public class PitCollection<T extends IPit> implements IPitCollection<T> {
     @Override
     public T Get(int index) {
         return pList.get(index);
+    }
+
+    @Override
+    public Stream<T> Stream() {
+        return pList.stream();
     }
 }

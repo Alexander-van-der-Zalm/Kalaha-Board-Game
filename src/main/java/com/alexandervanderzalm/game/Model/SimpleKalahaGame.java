@@ -216,7 +216,7 @@ public class SimpleKalahaGame implements IGame {
     private TurnData GameToTurnData(){
         TurnData data = new TurnData();
         // Transform pit data into clean rest data
-        data.Pits = pits.pList.stream().map(x -> new KalahaPitData(x.GetPlayer(),x.IsKalaha(),x.Amount())).collect(Collectors.toList());
+        data.Pits = pits.pList.stream().map(x -> new PitData(x.GetPlayer(),x.IsKalaha(),x.Amount())).collect(Collectors.toList());
         //data.Pits = pits.pList.stream().map(x -> x.Data()).collect(Collectors.toList()); // Not a deep copy...
         data.NextTurnState = nextTurnState;
         data.Turn = currentTurn;

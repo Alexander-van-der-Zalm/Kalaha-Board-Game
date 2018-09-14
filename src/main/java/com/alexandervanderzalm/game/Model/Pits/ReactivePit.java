@@ -7,14 +7,14 @@ public class ReactivePit implements IPit<Integer>{
     public MethodCollection<Integer> OnAdd = new MethodCollection<>();
     public MethodCollection<Integer> OnGrab = new MethodCollection<>();
 
-    private KalahaPitData data;
+    private PitData data;
 
-    public ReactivePit(KalahaPitData data) {
+    public ReactivePit(PitData data) {
         this.data = data;
     }
 
     public ReactivePit() {
-        data = new KalahaPitData();
+        data = new PitData();
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ReactivePit implements IPit<Integer>{
         return result;
     }
 
-    public KalahaPitData Data(){
+    public PitData Data(){
         return data;
     }
 }

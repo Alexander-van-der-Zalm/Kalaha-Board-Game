@@ -2,16 +2,14 @@ package com.alexandervanderzalm.game.Model.Pits;
 
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Utility.ProcedureCollection;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PitUtil {
 
-    public static List<KalahaPitData> CreatePitDataList(int normalPitsPerPlayer, int stonesAmount){
+    public static List<PitData> CreatePitDataList(int normalPitsPerPlayer, int stonesAmount){
         int[] normalPits = new int[normalPitsPerPlayer * 2];
         for (int i = 0; i < normalPitsPerPlayer * 2; i++) {
             normalPits[i] = stonesAmount;
@@ -19,17 +17,17 @@ public class PitUtil {
         return CreatePitDataList(0,0,normalPits);
     }
 
-    public static List<KalahaPitData> CreatePitDataList(int p1Score, int p2Score, int[] normalPits){
+    public static List<PitData> CreatePitDataList(int p1Score, int p2Score, int[] normalPits){
         // Initialize from normalPits data
         if(normalPits.length % 2 > 0)
             System.out.println("CreatePitDataList - NOTE! - normalPits not an even amount");
 
-        List<KalahaPitData> result = new ArrayList<>();
+        List<PitData> result = new ArrayList<>();
         // Add normalPits
-        Arrays.stream(normalPits).forEach((p) -> result.add(new KalahaPitData(0,false, p)));
+        Arrays.stream(normalPits).forEach((p) -> result.add(new PitData(0,false, p)));
         // Add kalahas
-        result.add(FirstKalaha(),new KalahaPitData(0,true,p1Score));
-        result.add(SecondKalaha(normalPits.length + 2),new KalahaPitData(0,true,p2Score));
+        result.add(FirstKalaha(),new PitData(0,true,p1Score));
+        result.add(SecondKalaha(normalPits.length + 2),new PitData(0,true,p2Score));
         SetPlayer(result);
 
         return result;
@@ -70,7 +68,7 @@ public class PitUtil {
         return pits;
     }
 
-    public static void SetPlayer(List<KalahaPitData> d){
+    public static void SetPlayer(List<PitData> d){
         d.forEach((p) -> p.player = GetPlayer(d.size(),d.indexOf(p)));
     }
 

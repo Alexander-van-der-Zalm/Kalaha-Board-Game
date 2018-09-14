@@ -27,21 +27,26 @@ public class ReactiveGameRules {
             return null;
         });
 
-        // Add basic pit logging capability
-        game.Data.Pits.pList.stream().forEach((pit) ->{
+        // Add basic pit logging capability  (used for view animation for example)
+        game.Data.Pits.Stream().forEach((pit) ->{
             pit.OnAdd.Add((stones) -> LogUtility.LogPit(game.Data, pit, stones));
             pit.OnGrab.Add((stones) -> LogUtility.LogPit(game.Data, pit, stones));
         });
 
         // Add extra turn rule check only to Kalahas
-        game.Data.Pits.pList.stream()
+        game.Data.Pits.Stream()
             .filter((p) -> p.Data().isKalaha)
             .forEach((pit) ->{
                 pit.OnAdd.Add((stones) -> {
+                    // Check if the hand is almost empty && if the kalaha is of the current player
                     if(game.Data.CurrentHand == 1 && pit.Data().player == game.Data.CurrentPlayer){
+
+                        // Add an entry to the logger
                         LogUtility.Log(game.Data.Logger,String.format("%sGains an Extra Turn for dropping the last stone in his own Kalaha.",
                                 LogUtility.LogStart(game.Data.CurrentPlayer ,  game.Data.CurrentTurn)
                         ));
+
+                        // Change the gameState to the same player
                         GameUtil.FlipGameState(game.Data);
                     }
                 });
