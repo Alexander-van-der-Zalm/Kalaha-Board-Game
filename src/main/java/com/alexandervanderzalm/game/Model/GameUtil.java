@@ -58,4 +58,10 @@ public class GameUtil {
     public static void FlipGameState(GameData d){
         d.NextTurnState = d.NextTurnState == GameState.TurnP1 ? GameState.TurnP2 : GameState.TurnP1;
     }
+
+    public static void NewTurn(GameData d){
+        d.CurrentTurn++;
+        d.CurrentPlayer = d.NextTurnState == GameState.TurnP1 ? 0 : 1;
+        FlipGameState(d);
+    }
 }

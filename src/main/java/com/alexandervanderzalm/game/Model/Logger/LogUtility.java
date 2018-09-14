@@ -21,6 +21,10 @@ public class LogUtility {
         System.out.println(textLog);
     }
 
+    public static String LogStartGameData(GameData data){
+        return LogStart(data.CurrentPlayer, data.CurrentTurn);
+    }
+
     public static String LogStart(TurnData data){
         return LogStart(data.NextTurnState == GameState.TurnP1 ? 0 : 1, data.Turn);
     }
