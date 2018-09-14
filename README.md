@@ -2,13 +2,13 @@
 **Web technology based game.**<br/>
 **Back-End: Java Spring Boot (starter-web & devtools), Rest API, MVC architecture, JUnit, Gradle, (TomCat local server) -- Intellij** <br/>
 **Front-End: HTML, CSS, Vanilla Javascript -- VisualCode**<br/>
-<a href="https://alexandervanderzalm.com/">Made by Alexander van der Zalm</a> - <a href="https://github.com/Bahamutho/Kalaha-Board-Game">Github</a>
+<a href="https://alexandervanderzalm.com/" target="_blank">Made by Alexander van der Zalm</a> - <a href="https://github.com/Bahamutho/Kalaha-Board-Game" target="_blank">Github</a>
 
 ## Setup
 
 1. Clone the git/unzip to a local directory
 2. Run the Application found in Root/src/main/java/com.alexandervanderzalm.game/Application.java
-3. Open browser and go to <a href="http://localhost:8080/">http://localhost:8080/</a>  *~Tested primarily in Chrome (Firefox looks good too)*
+3. Open browser and go to <a href="http://localhost:8080/" target="_blank">http://localhost:8080/</a>  *~Tested primarily in Chrome (Firefox looks good too)*
 4. *Optionally change the \src\main\java\com.alexandervanderzalm.game\Controllers\GameService.java file to run the simple variant.*
 
 ## Basic architecture
