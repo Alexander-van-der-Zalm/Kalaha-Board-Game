@@ -29,6 +29,10 @@ public class GameUtil {
         return null;
     }
 
+    public static int GetPlayerNextTurn(GameData d){
+        return d.NextTurnState == GameState.TurnP1 ? 0 : 1;
+    }
+
     public static TurnData EmptyFieldsWinCondition(GameData d) {
         // Check
         if(d.Pits.pList.stream().filter((p) -> !p.Data().isKalaha && p.Amount() == 0 && p.Data().player == 0).count() == 6
@@ -59,7 +63,7 @@ public class GameUtil {
         d.NextTurnState = d.NextTurnState == GameState.TurnP1 ? GameState.TurnP2 : GameState.TurnP1;
     }
 
-    public static void NewTurn(GameData d){
+    public static void NewTurnSetup(GameData d){
         d.CurrentTurn++;
         d.CurrentPlayer = d.NextTurnState == GameState.TurnP1 ? 0 : 1;
         FlipGameState(d);

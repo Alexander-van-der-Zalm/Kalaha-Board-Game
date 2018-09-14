@@ -41,6 +41,8 @@ public class ReactiveKalahaGame implements IGame {
         Data.Pits.pList.stream().filter((p) -> !p.Data().isKalaha)
                 .forEach((p) -> LogUtility.Log(Data.Logger,Data.Pits,p,6));
 
+        LogUtility.Log(Data.Logger,"Set up a new Kalaha Game!");
+        LogUtility.Log(Data.Logger, String.format("%sNew Turn",LogUtility.LogStart(Data.CurrentPlayer, Data.CurrentTurn +1)));
         return this.Data.ToTurnData();
     }
 
@@ -53,7 +55,7 @@ public class ReactiveKalahaGame implements IGame {
             return error;
 
         // Update Turncounter & flip
-        GameUtil.NewTurn(Data);
+        GameUtil.NewTurnSetup(Data);
 
         // Do the core turn procedure
         if(Functionality.TurnProcedure != null)
@@ -86,7 +88,7 @@ class WireReactiveGame{
 
         // Log for new turn
         game.Functionality.SpecialEndOfTurnScenarios.Add((d) ->{
-            LogUtility.Log(game.Data.Logger, String.format("%sNew Turn",LogUtility.LogStartGameData(game.Data)));
+            LogUtility.Log(game.Data.Logger, String.format("%sNew Turn",LogUtility.LogStart(GameUtil.GetPlayerNextTurn(d),game.Data.CurrentTurn + 1)));
             return null;
         });
 
@@ -101,7 +103,7 @@ class WireReactiveGame{
             .filter((p) -> p.Data().isKalaha)
             .forEach((pit) ->{
                 pit.OnAdd.Add((stones) -> {
-                    if(game.Data.CurrentHand == 0 && pit.Data().player == game.Data.CurrentPlayer){
+                    if(game.Data.CurrentHand == 1 && pit.Data().player == game.Data.CurrentPlayer){
                         LogUtility.Log(game.Data.Logger,String.format("%sGains an Extra Turn for dropping the last stone in his own Kalaha.",
                                 LogUtility.LogStart(game.Data.CurrentPlayer ,  game.Data.CurrentTurn)
                         ));
@@ -115,10 +117,13 @@ class WireReactiveGame{
                 .filter((p) -> !p.Data().isKalaha)
                 .forEach((pit) ->{
             pit.OnAdd.Add((changed) ->{
-                if(game.Data.CurrentHand == 0 && pit.Amount()-changed == 0 && pit.Data().player == game.Data.CurrentPlayer){
+                if(game.Data.CurrentHand == 1 && pit.Amount()-changed == 0 && pit.Data().player == game.Data.CurrentPlayer){
 
                     ReactivePit opposite = game.Data.Pits.Opposite(pit);
                     ReactivePit kalaha = game.Data.Pits.KalahaOfPlayer(game.Data.CurrentPlayer);
+
+                    // To prevent triggering of next turn on scoring of kalaha
+                    game.Data.CurrentHand=0;
                     // Grab the one from the pit that was just dropped
                     pit.GrabAll();
                     // Capture opposite stones
@@ -165,9 +170,9 @@ class WireReactiveGame{
                     continue;
                 }
 
-                // Remove from hand and add to the current pit
-                game.Data.CurrentHand--;
+                // Add to current pit and then remove from hand (to triggering conditional bugs for extra turn)
                 current.Add(1);
+                game.Data.CurrentHand--;
             }
         };
     }
