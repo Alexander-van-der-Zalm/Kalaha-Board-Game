@@ -16,7 +16,9 @@ The game is implemented using a basic MVC like architecture with a Rest API.
 **Rest API via GameController -> GameService -> IGame (Model)**
 
 A spring boot rest service that via the service interacts with the actual model/game logic. </br>
-The Rest API receives: TurnDataInput (a selected index) and returns TurnData. 
+The Rest API receives: TurnDataInput (a selected index) and returns TurnData. Requests mapping:
+* Get to /game - Sets up a new game and returns a TurnData json representation of it.
+* Post to /game - Expects a json representing TurnDataInput, does the turn based on the index in TurnDataInput and returns a TurnData json representation of the resolved turn.
 
 **TurnData**
 
@@ -99,7 +101,32 @@ game.Data.Pits.Stream()
 });
 ```
 
+**Support packages**
+
+* Model/Game - Consists of the earlier mentioned separated aspects, a GameFactory (for testing) and GameUtility (for general game functionality).
+* Model/Logger - Log changes in PitLog (for pit transforms) and TextLog (for general text messages) to note the important changes of the game. Based on the simple data type LogData.
+* Model/Pits - Contains a few pit variations (some with functional hooks and some without), pitcollection & utility and the simple datatype PitData.
+* Model/Turn - The simple datatype TurnData and some utility
+* Utility - General non app specific method collections and method schedulers to make it easier to work reactively.
+
+### View
+
+<img src="https://alexandervanderzalm.com/wp-content/uploads/2018/09/Kalaha-Board-Game-Alexander-van-der-Zalm.png" data-canonical-src="https://alexandervanderzalm.com/wp-content/uploads/2018/09/Kalaha-Board-Game-Alexander-van-der-Zalm.png" width="600" />
+
+The view was made with HTML,CSS, and Vanilla Javascript. The javascript contains a simple animation system to show whats happening pit transformation wise and a simple log system to further make it clear what is happening.
+
+*I know the view was not important. However it is nice to note that I in fact do enjoy working front-end as well and am particularly interested in Typescript, WebGL and WebAssembly.*
+
+The html file can be found in: /Root/src/main/resources/public/index.html.
+
 ## Test Driven Development
+
+During the development more tests were added as the game got together. Once the simplegame variant was made a tweak to the original SimpleGameTest made it so that both the new ReactiveGame and the old SimpleGame implementation could directly be tested with all these tests. Then it was simply making sure all the tests passed and developing accordingly. With actual testing a few bugs were identified and added to the test catalog, which would then again also run and test the old implementation. 
+
+In this project tests were made primarily for the more error prone parts of the project and has decent coverage in that regard.
+
+### Running the JUNIT4 Tests
+Via Intellij right click on the /Root/test/ folder and run all tests.
 
 ## What is relatively easy to do from here?
 
