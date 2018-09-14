@@ -37,6 +37,10 @@ public class ReactiveKalahaGame implements IGame {
 
         WireReactiveGame.WireReactiveKalahaGameRules(this);
 
+        // Add the logs of the stones
+        Data.Pits.pList.stream().filter((p) -> !p.Data().isKalaha)
+                .forEach((p) -> LogUtility.Log(Data.Logger,Data.Pits,p,6));
+
         return this.Data.ToTurnData();
     }
 
@@ -82,7 +86,7 @@ class WireReactiveGame{
 
         // Log for new turn
         game.Functionality.SpecialEndOfTurnScenarios.Add((d) ->{
-            LogUtility.Log(game.Data.Logger, String.format("%s - New Turn",LogUtility.LogStartGameData(game.Data)));
+            LogUtility.Log(game.Data.Logger, String.format("%sNew Turn",LogUtility.LogStartGameData(game.Data)));
             return null;
         });
 
@@ -114,13 +118,13 @@ class WireReactiveGame{
                 if(game.Data.CurrentHand == 0 && pit.Amount()-changed == 0 && pit.Data().player == game.Data.CurrentPlayer){
 
                     ReactivePit opposite = game.Data.Pits.Opposite(pit);
-                    ReactivePit kalaha = game.Data.Pits.KalahaOfPlayer1();
+                    ReactivePit kalaha = game.Data.Pits.KalahaOfPlayer(game.Data.CurrentPlayer);
                     // Grab the one from the pit that was just dropped
-                    // Put it into the kalaha
-                    kalaha.Add(pit.GrabAll());
+                    pit.GrabAll();
                     // Capture opposite stones
-                    // Add to kalaha
                     Integer capturedStones = opposite.GrabAll();
+
+                    kalaha.Add(1);
                     kalaha.Add(capturedStones);
 
                     // Log the event
@@ -143,7 +147,7 @@ class WireReactiveGame{
 
             // Log pickup
             LogUtility.Log(game.Data.Logger,
-                String.format("%s- Grabbed %d stones from pit %d.",
+                String.format("%sGrabbed %d stones from pit %d.",
                     LogUtility.LogStart(game.Data.CurrentPlayer ,  game.Data.CurrentTurn),
                     game.Data.CurrentHand,
                     index

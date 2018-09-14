@@ -49,6 +49,16 @@ public class GameTest {
     }
 
     @Test
+    public void SetupNewGame_NewGame_HasSetupCorrectLogs() {
+        IGame g = GameCreator.Create();
+        TurnData t0 = g.SetupNewGame();
+
+        System.out.println(t0.Pits);
+
+        assertEquals(12, t0.Log.stream().filter((l) -> l.Type == LogTypes.PitLog).count());
+    }
+
+    @Test
     public void DoTurn_InitializedGame_TurnProcessed(){
         IGame g = GameCreator.Create();
         TurnData t0 = g.SetupNewGame();
@@ -160,6 +170,23 @@ public class GameTest {
         // Should be 20 + 1 afer turn
         assertEquals(t0.Player1Score, 0);
         assertEquals(t1.Player1Score, 21);
+    }
+
+    @Test public void DoTurn_LandInOwnEmptyP2_TransferOpponentsPitToKalaha(){
+        // Setup
+        IGame g = GameCreator.Create();
+        // -->                             first row     second row (clockwise ie inverted order)
+        int[] mockNormalFields = new int[]{0,20,1,0,1,20,  9,11,0,0,0,1};
+        TurnData t0Setup = new TurnData(PitUtil.CreatePitDataList(0,0,mockNormalFields));
+        TurnData t0 = g.SetUpGameFromTurnData(t0Setup);
+
+        // Do the turn
+        TurnData t1 = g.DoTurn(3);
+        TurnData t2 = g.DoTurn(13);
+
+        // Should be 20 + 1 + 1 afer turn2
+        assertEquals(0, t0.Player2Score);
+        assertEquals(22,t2.Player2Score);
     }
 
     // Faulty input

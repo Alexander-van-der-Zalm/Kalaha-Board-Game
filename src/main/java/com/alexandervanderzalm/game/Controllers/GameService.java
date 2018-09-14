@@ -14,7 +14,7 @@ public class GameService {
 
     // TODO serve multiple game instances(requires hash?)
     public TurnData StartNewGame() {
-        game = new SimpleKalahaGame();
+        game = new ReactiveKalahaGame();//new SimpleKalahaGame();
 
         return game.SetupNewGame();
     }
