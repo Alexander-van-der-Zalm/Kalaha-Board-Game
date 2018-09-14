@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Game;
 
 import com.alexandervanderzalm.game.Model.Logger.LogUtility;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;

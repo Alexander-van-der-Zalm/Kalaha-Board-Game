@@ -1,6 +1,6 @@
 package com.alexandervanderzalm.game.Model.Turn;
 
-import com.alexandervanderzalm.game.Model.GameState;
+import com.alexandervanderzalm.game.Model.Game.GameState;
 
 public class TurnUtil {
     public static int GetPlayer(TurnData d){

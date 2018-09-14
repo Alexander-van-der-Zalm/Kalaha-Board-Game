@@ -1,4 +1,4 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Game;
 
 public enum GameState{
     TurnP1, TurnP2, WinP1, WinP2

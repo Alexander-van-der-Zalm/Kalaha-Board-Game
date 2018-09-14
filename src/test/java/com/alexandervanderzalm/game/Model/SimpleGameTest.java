@@ -1,5 +1,7 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Model.Game.GameState;
+import com.alexandervanderzalm.game.Model.Game.IGame;
 import com.alexandervanderzalm.game.Model.Logger.LogData;
 import com.alexandervanderzalm.game.Model.Logger.LogTypes;
 import com.alexandervanderzalm.game.Model.Pits.PitUtil;

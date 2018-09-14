@@ -1,6 +1,7 @@
 package com.alexandervanderzalm.game.Controllers;
 
 import com.alexandervanderzalm.game.Model.*;
+import com.alexandervanderzalm.game.Model.Game.IGame;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Model.Turn.TurnInputData;
 import org.springframework.stereotype.Service;

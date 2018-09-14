@@ -1,10 +1,10 @@
-package com.alexandervanderzalm.game.Model;
+package com.alexandervanderzalm.game.Model.Game;
 
 import com.alexandervanderzalm.game.Model.Logger.LogCollection;
 import com.alexandervanderzalm.game.Model.Logger.LogUtility;
 import com.alexandervanderzalm.game.Model.Pits.KalahaPitData;
 import com.alexandervanderzalm.game.Model.Pits.PitCollection;
-import com.alexandervanderzalm.game.Model.Pits.PitUtil;
+import com.alexandervanderzalm.game.Model.Pits.ReactivePit;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Model.Turn.TurnUtil;
 

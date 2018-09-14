@@ -1,5 +1,6 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Model.Game.*;
 import com.alexandervanderzalm.game.Model.Logger.LogData;
 import com.alexandervanderzalm.game.Model.Logger.LogTypes;
 import com.alexandervanderzalm.game.Model.Pits.PitUtil;
@@ -21,17 +22,17 @@ import static org.junit.Assert.assertTrue;
 public class GameTest {
 
     // Setup up so that it can create multiple interface implementations
-    private IGameCreator GameCreator;
+    private IGameFactory GameCreator;
 
-    public GameTest(IGameCreator game) {
+    public GameTest(IGameFactory game) {
         this.GameCreator = game;
     }
 
     @Parameterized.Parameters
     public static Collection<Object[]> getParameters(){
         return Arrays.asList(new Object[][]{
-                { new SimpleGameCreator() },
-                { new ReactiveGameCreator() }
+                { new SimpleGameFactory() },
+                { new ReactiveGameFactory() }
         });
     }
 

@@ -1,5 +1,7 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Model.Game.GameState;
+import com.alexandervanderzalm.game.Model.Game.IGame;
 import com.alexandervanderzalm.game.Model.Logger.LogCollection;
 import com.alexandervanderzalm.game.Model.Logger.LogUtility;
 import com.alexandervanderzalm.game.Model.Pits.*;
@@ -30,7 +32,7 @@ import java.util.stream.Collectors;
     *   Reactive approach.
     *   TODO LogicGameFramework & Ruleset (Currently not fully implemented)
  */
-public class SimpleKalahaGame implements IGame{
+public class SimpleKalahaGame implements IGame {
 
     private PitCollection<IKalahaPit> pits;
     private GameState nextTurnState;

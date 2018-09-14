@@ -1,8 +1,7 @@
 package com.alexandervanderzalm.game.Model.Turn;
 
 
-import com.alexandervanderzalm.game.Model.GameState;
-import com.alexandervanderzalm.game.Model.Logger.ILog;
+import com.alexandervanderzalm.game.Model.Game.GameState;
 import com.alexandervanderzalm.game.Model.Logger.LogData;
 import com.alexandervanderzalm.game.Model.Pits.KalahaPitData;
 import com.alexandervanderzalm.game.Model.Pits.PitUtil;

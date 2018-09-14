@@ -1,5 +1,6 @@
 package com.alexandervanderzalm.game.Model;
 
+import com.alexandervanderzalm.game.Model.Pits.ReactivePit;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

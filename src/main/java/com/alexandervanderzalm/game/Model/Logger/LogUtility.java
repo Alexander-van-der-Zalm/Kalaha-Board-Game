@@ -1,7 +1,7 @@
 package com.alexandervanderzalm.game.Model.Logger;
 
-import com.alexandervanderzalm.game.Model.GameData;
-import com.alexandervanderzalm.game.Model.GameState;
+import com.alexandervanderzalm.game.Model.Game.GameData;
+import com.alexandervanderzalm.game.Model.Game.GameState;
 import com.alexandervanderzalm.game.Model.Pits.IPit;
 import com.alexandervanderzalm.game.Model.Pits.IPitCollection;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
