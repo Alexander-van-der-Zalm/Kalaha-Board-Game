@@ -32,7 +32,8 @@ public class GameData{
         LogUtility.SetLoggerFromTurnData(Logger,data);
     }
 
-    public TurnData ToTurnData() {
+    public TurnData
+    ToTurnData() {
         TurnData data = new TurnData();
 
         // Transform pit data into clean rest data

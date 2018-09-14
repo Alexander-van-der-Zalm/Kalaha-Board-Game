@@ -53,7 +53,7 @@ public class GameTest {
         IGame g = GameCreator.Create();
         TurnData t0 = g.SetupNewGame();
 
-        Assert.isTrue(t0.Pits.get(1).stones == 6, "Check if the selected pit is empty");
+        assertEquals(6,(long)t0.Pits.get(1).stones );//, "Check if the selected pit is empty");
 
         TurnData t1 = g.DoTurn(1);
 

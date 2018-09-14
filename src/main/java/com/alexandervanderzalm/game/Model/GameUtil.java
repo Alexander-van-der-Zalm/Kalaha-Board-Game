@@ -16,6 +16,7 @@ public class GameUtil {
         int p2 = data.Pits.KalahaOfPlayer2().Amount();
         if(p1 + pitsInField < p2 || p2 + pitsInField < p1) {
             LogUtility.Log(data.Logger, String.format("Turn %d - Unwinnable condition detected. %s: %d Field: %d %s: %d.",
+                    data.CurrentTurn,
                     LogUtility.LogPlayer(0),
                     p1,
                     pitsInField,

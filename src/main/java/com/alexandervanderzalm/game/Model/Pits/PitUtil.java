@@ -13,7 +13,9 @@ public class PitUtil {
 
     public static List<KalahaPitData> CreatePitDataList(int normalPitsPerPlayer, int stonesAmount){
         int[] normalPits = new int[normalPitsPerPlayer * 2];
-        Arrays.stream(normalPits).forEach((p) -> p = stonesAmount);
+        for (int i = 0; i < normalPitsPerPlayer * 2; i++) {
+            normalPits[i] = stonesAmount;
+        }
         return CreatePitDataList(0,0,normalPits);
     }
 

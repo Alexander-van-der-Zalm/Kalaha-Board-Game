@@ -3,10 +3,10 @@ package com.alexandervanderzalm.game.Model;
 import com.alexandervanderzalm.game.Model.Logger.LogUtility;
 import com.alexandervanderzalm.game.Model.Pits.IPit;
 import com.alexandervanderzalm.game.Model.Pits.KalahaPitData;
+import com.alexandervanderzalm.game.Model.Pits.PitUtil;
 import com.alexandervanderzalm.game.Model.Turn.TurnData;
 import com.alexandervanderzalm.game.Utility.FunctionCollection;
 import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Method;
-import com.alexandervanderzalm.game.Utility.FunctionalInterfaces.Procedure;
 import com.alexandervanderzalm.game.Utility.MethodCollection;
 
 import java.util.List;
@@ -14,17 +14,30 @@ import java.util.stream.Collectors;
 
 public class ReactiveKalahaGame implements IGame {
 
-    public ReactiveGameData Settings;
+    public ReactiveGameFunctionality Functionality;
     public GameData Data;
+
+    public ReactiveKalahaGame() {
+        Functionality = new ReactiveGameFunctionality();
+    }
 
     @Override
     public TurnData SetupNewGame() {
-        return null;
+        // Setup field
+        TurnData setup = new TurnData(PitUtil.CreatePitDataList(6,6));
+
+        // Wire functions & do setup via SetUpGameFromTurnData
+        return SetUpGameFromTurnData(setup);
     }
 
     @Override
     public TurnData SetUpGameFromTurnData(TurnData data) {
-        return null;
+        // Setup game from data
+        Data = new GameData(data);
+
+        WireReactiveGame.WireReactiveKalahaGameRules(this);
+
+        return this.Data.ToTurnData();
     }
 
 
@@ -38,11 +51,11 @@ public class ReactiveKalahaGame implements IGame {
         // TODO update Turncounter & flip -- see simple
 
         // Do the core turn procedure
-        if(Settings.TurnProcedure != null)
-            Settings.TurnProcedure.Process(SelectedIndex);
+        if(Functionality.TurnProcedure != null)
+            Functionality.TurnProcedure.Process(SelectedIndex);
 
         // Special end of turn scenarios (such as winning)
-        List<TurnData> endScenarios = Settings.SpecialEndOfTurnScenarios.Process(Data).stream().filter((end) -> end!=null).collect(Collectors.toList());
+        List<TurnData> endScenarios = Functionality.SpecialEndOfTurnScenarios.Process(Data).stream().filter((end) -> end!=null).collect(Collectors.toList());
         if(endScenarios.size() > 0)
             return endScenarios.get(0);
 
@@ -54,15 +67,15 @@ class WireReactiveGame{
     public static void WireReactiveKalahaGameRules(ReactiveKalahaGame game){
 
         // Special turn ending scenarios (override a normal to TurnData)
-        game.Settings.SpecialEndOfTurnScenarios = new FunctionCollection<>();
+        game.Functionality.SpecialEndOfTurnScenarios = new FunctionCollection<>();
 
         // Normal End Game - Priority 1
-        game.Settings.SpecialEndOfTurnScenarios.Add((d) ->{
+        game.Functionality.SpecialEndOfTurnScenarios.Add((d) ->{
             return GameUtil.EmptyFieldsWinCondition(d);
         });
 
         // Unwinnable - Priority 2
-        game.Settings.SpecialEndOfTurnScenarios.Add((d) ->{
+        game.Functionality.SpecialEndOfTurnScenarios.Add((d) ->{
             return GameUtil.UnwinnableWinCondition(d);
         });
 
@@ -93,7 +106,7 @@ class WireReactiveGame{
 
 
         // The core turn procedure definition
-        game.Settings.TurnProcedure = (index) -> {
+        game.Functionality.TurnProcedure = (index) -> {
             ReactivePit current = game.Data.Pits.Get(index);
             game.Data.CurrentHand = current.GrabAll();
 
@@ -125,7 +138,7 @@ class WireReactiveGame{
     }
 }
 
-class ReactiveGameData{
+class ReactiveGameFunctionality {
     public FunctionCollection<GameData,TurnData> SpecialEndOfTurnScenarios;
     public Method<Integer> TurnProcedure;
 }
